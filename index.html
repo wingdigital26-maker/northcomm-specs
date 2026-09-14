@@ -18,116 +18,134 @@
 <meta name="twitter:image" content="https://wingdigital26-maker.github.io/northcomm-specs/icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#353535; --signal:#FF3800; --signal-press:#d92f00;
-    --paper:#ffffff; --mist:#f6f5f3; --line:#e4e2df; --steel:#6b6b69;
-    --text:#2b2b2b; --pass:#1c8a4a; --fail:#c0392b;
-    --radius:14px;
-    --sans:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    --mono:ui-monospace,"SF Mono","Roboto Mono",Menlo,Consolas,monospace;
+    --ink:#20211f; --sub:#5c5f5a; --signal:#FF3800; --signal-press:#d92f00;
+    --paper:#fbfaf7; --panel:#ffffff; --line:#dcdad4; --line-strong:#c4c1b8;
+    --grid:#eceae3; --pass:#187a44; --fail:#c0392b;
+    --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
     color-scheme:light;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{-webkit-text-size-adjust:100%;text-size-adjust:100%;scroll-behavior:smooth}
-  body{font-family:var(--sans);background:var(--mist);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.5}
+  body{font-family:var(--sans);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5}
   img{max-width:100%}
   a{color:inherit}
-  .wrap{max-width:960px;margin:0 auto;padding:0 20px}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
+
+  /* index label: 01 / LOOKUP */
+  .idx{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.05em;color:var(--sub);text-transform:uppercase;display:flex;align-items:center;gap:9px}
+  .idx b{color:var(--signal);font-weight:600}
+  .idx::after{content:"";flex:1;height:1px;background:var(--line)}
 
   /* top bar */
-  .topbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line)}
-  .topbar .wrap{display:flex;align-items:center;gap:12px;height:60px}
-  .brand{display:flex;align-items:center;gap:11px;text-decoration:none}
-  .brand .logo{height:26px;width:auto;display:block}
-  .brand .tagline{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--steel);padding-left:11px;border-left:1px solid var(--line)}
-  @media (max-width:520px){.brand .logo{height:22px}.brand .tagline{display:none}}
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(251,250,247,.92);backdrop-filter:saturate(1.1) blur(6px);border-bottom:1px solid var(--line-strong)}
+  .topbar .wrap{display:flex;align-items:center;gap:14px;height:58px}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .brand .logo{height:24px;width:auto;display:block}
+  .brand .tagline{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--sub);padding-left:12px;border-left:1px solid var(--line-strong)}
   .topbar .spacer{flex:1}
-  .toplink{font-size:13.5px;font-weight:600;color:var(--steel);text-decoration:none;padding:8px 10px;border-radius:9px}
-  .toplink:hover{background:var(--mist);color:var(--ink)}
+  .status{font-family:var(--mono);font-size:11.5px;color:var(--sub);display:flex;align-items:center;gap:7px;text-decoration:none}
+  .status .dot{width:7px;height:7px;border-radius:50%;background:#c9c6bd}
+  .status.live .dot{background:var(--pass);box-shadow:0 0 0 3px color-mix(in srgb,var(--pass) 20%,transparent)}
+  @media (max-width:600px){.brand .tagline{display:none}.status .txt{display:none}}
 
-  /* hero / search */
-  .hero{background:var(--paper);border-bottom:1px solid var(--line);padding:64px 0 56px;text-align:center}
-  .eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--signal)}
-  .hero h1{font-size:clamp(28px,5.4vw,44px);font-weight:800;letter-spacing:-.02em;color:var(--ink);margin:14px auto 0;max-width:16ch;line-height:1.08}
-  .hero p{font-size:clamp(14px,2.4vw,16.5px);color:var(--steel);margin:16px auto 0;max-width:52ch}
-  .searchbox{display:flex;gap:10px;max-width:520px;margin:30px auto 0;flex-wrap:wrap}
-  .searchbox input{flex:1;min-width:220px;font-family:var(--mono);font-size:16px;letter-spacing:.02em;padding:16px 18px;border:1.5px solid var(--line);border-radius:var(--radius);background:var(--mist);color:var(--text);outline:none;transition:border-color .15s}
-  .searchbox input:focus{border-color:var(--signal);background:var(--paper)}
-  .searchbox button{border:none;border-radius:var(--radius);font-family:inherit;font-size:15.5px;font-weight:700;padding:16px 28px;background:var(--signal);color:#fff;cursor:pointer;transition:transform .05s,background .15s;flex-shrink:0}
+  /* hero */
+  .hero{position:relative;border-bottom:1px solid var(--line-strong);overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(180deg,#000 0%,transparent 78%);-webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 78%);opacity:.9;pointer-events:none}
+  .hero .wrap{position:relative;padding:clamp(40px,7vw,74px) clamp(18px,4vw,40px) clamp(34px,5vw,54px)}
+  .hero .idx{max-width:560px}
+  .hero h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,7vw,64px);line-height:.98;letter-spacing:-.015em;color:var(--ink);margin:20px 0 0;max-width:15ch}
+  .hero h1 em{font-style:normal;color:var(--signal)}
+  .hero .lede{font-size:clamp(15px,2.2vw,17px);color:var(--sub);margin:18px 0 0;max-width:50ch;line-height:1.55}
+
+  /* search console */
+  .console{margin:30px 0 0;max-width:620px;background:var(--panel);border:1px solid var(--line-strong);box-shadow:0 1px 0 var(--line)}
+  .console .clabel{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--sub)}
+  .console .clabel span:last-child{color:var(--signal)}
+  .searchbox{display:flex;align-items:stretch}
+  .searchbox .sn{display:flex;align-items:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--sub);padding:0 14px;border-right:1px solid var(--line);background:var(--paper);letter-spacing:.05em}
+  .searchbox input{flex:1;min-width:0;font-family:var(--mono);font-size:clamp(16px,2vw,19px);font-weight:500;letter-spacing:.03em;padding:18px 16px;border:none;background:transparent;color:var(--ink);outline:none}
+  .searchbox input::placeholder{color:#b7b4ab;font-weight:400}
+  .searchbox button{border:none;font-family:var(--cond);font-size:15px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:0 clamp(20px,3vw,34px);background:var(--signal);color:#fff;cursor:pointer;transition:background .15s;flex-shrink:0}
   .searchbox button:hover{background:var(--signal-press)}
-  .searchbox button:active{transform:scale(.98)}
   .searchbox button:disabled{opacity:.6;cursor:default}
-  .hint{font-size:12.5px;color:var(--steel);margin-top:14px}
-  .hint b{color:var(--text);font-family:var(--mono);font-weight:600}
+  .searchbox input:focus{box-shadow:inset 0 -2px 0 var(--signal)}
+  .hint{font-family:var(--mono);font-size:12px;color:var(--sub);margin:14px 2px 0}
+  .hint b{color:var(--ink);font-weight:600}
 
-  /* result */
-  .result{max-width:640px;margin:26px auto 0;text-align:left}
-  .card{background:var(--paper);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:0 10px 30px rgba(0,0,0,.05)}
-  .card .head{padding:22px 24px;border-bottom:1px solid var(--line);display:flex;align-items:flex-start;gap:14px}
-  .card .head .ser{font-family:var(--mono);font-size:13px;color:var(--steel);letter-spacing:.02em}
-  .card .head h2{font-size:19px;font-weight:800;color:var(--ink);margin-top:4px;letter-spacing:-.01em}
-  .badge{margin-left:auto;flex-shrink:0;font-size:11.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px}
-  .badge.pass{background:color-mix(in srgb,var(--pass) 15%,transparent);color:var(--pass)}
-  .badge.fail{background:color-mix(in srgb,var(--fail) 15%,transparent);color:var(--fail)}
-  .badge.na{background:var(--mist);color:var(--steel)}
+  .result{margin:22px 0 0;max-width:660px}
+  .result:empty{margin:0}
+
+  /* result card — datasheet */
+  .card{background:var(--panel);border:1px solid var(--line-strong)}
+  .card .head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px}
+  .card .head .meta{min-width:0}
+  .card .head .ser{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--signal);letter-spacing:.04em}
+  .card .head h2{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--ink);margin-top:5px;line-height:1.25}
+  .badge{margin-left:auto;flex-shrink:0;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border:1px solid}
+  .badge.pass{color:var(--pass);border-color:color-mix(in srgb,var(--pass) 45%,transparent);background:color-mix(in srgb,var(--pass) 8%,transparent)}
+  .badge.fail{color:var(--fail);border-color:color-mix(in srgb,var(--fail) 45%,transparent);background:color-mix(in srgb,var(--fail) 8%,transparent)}
+  .badge.na{color:var(--sub);border-color:var(--line-strong);background:var(--paper)}
   table.specs{width:100%;border-collapse:collapse}
-  table.specs td{padding:13px 24px;font-size:14px;border-bottom:1px solid var(--line)}
+  table.specs td{padding:12px 20px;font-size:13.5px;border-bottom:1px solid var(--line)}
   table.specs tr:last-child td{border-bottom:none}
-  table.specs td:first-child{color:var(--steel);width:52%}
+  table.specs tr:nth-child(even){background:var(--paper)}
+  table.specs td:first-child{font-family:var(--mono);font-size:12px;color:var(--sub);width:56%;letter-spacing:.02em}
   table.specs td:last-child{text-align:right;font-family:var(--mono);color:var(--ink);font-weight:600}
-  .card .foot{padding:18px 24px;display:flex;gap:10px;flex-wrap:wrap;background:var(--mist)}
-  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:12px;font-family:inherit;font-size:14.5px;font-weight:700;padding:14px 20px;cursor:pointer;text-decoration:none;transition:transform .05s,background .15s}
-  .btn:active{transform:scale(.98)}
-  .btn-primary{background:var(--signal);color:#fff}
-  .btn-primary:hover{background:var(--signal-press)}
-  .btn-ghost{background:var(--paper);color:var(--ink);border:1px solid var(--line)}
-  .btn-ghost:hover{border-color:var(--steel)}
-  .notice{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:26px 24px;text-align:center;color:var(--steel);font-size:14px;line-height:1.6}
-  .notice b{color:var(--text);font-family:var(--mono)}
-  .notice .big{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:6px}
+  .card .foot{padding:16px 20px;display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);background:var(--paper)}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;font-family:var(--cond);font-size:14px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;padding:13px 20px;cursor:pointer;text-decoration:none;transition:background .15s,border-color .15s}
+  .btn-primary{background:var(--ink);color:#fff}
+  .btn-primary:hover{background:#000}
+  .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line-strong)}
+  .btn-ghost:hover{border-color:var(--ink)}
+  .notice{background:var(--panel);border:1px solid var(--line-strong);padding:22px 20px;color:var(--sub);font-size:13.5px;line-height:1.6}
+  .notice b{color:var(--ink);font-family:var(--mono)}
+  .notice .big{font-family:var(--cond);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:-.01em}
 
-  /* browse / sections */
-  section.block{padding:56px 0}
-  section.block h3{font-size:13px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);text-align:center}
-  section.block h3 + p.lead{text-align:center;font-size:clamp(20px,3.4vw,27px);font-weight:800;color:var(--ink);letter-spacing:-.01em;margin:10px auto 0;max-width:22ch}
-  .browse{max-width:720px;margin:28px auto 0;display:grid;gap:10px}
-  .row{display:flex;align-items:center;gap:14px;padding:16px 18px;background:var(--paper);border:1px solid var(--line);border-radius:12px;cursor:pointer;text-align:left;width:100%;font-family:inherit;transition:border-color .15s}
-  .row:hover{border-color:var(--signal)}
-  .row .tag{width:8px;height:40px;border-radius:4px;background:var(--signal);flex-shrink:0}
-  .row .t{display:block;font-weight:700;color:var(--ink);font-size:15px}
-  .row .s{display:block;font-size:12.5px;color:var(--steel);margin-top:2px;font-family:var(--mono)}
-  .row .chev{margin-left:auto;color:var(--steel);font-size:20px}
-  .browse .empty,.browse .loading{padding:30px;text-align:center;color:var(--steel);font-size:13.5px;background:var(--paper);border:1px solid var(--line);border-radius:12px}
+  /* sections */
+  section.block{padding:clamp(44px,6vw,64px) 0;border-bottom:1px solid var(--line-strong)}
+  section.block .head-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+  section.block h3{font-family:var(--cond);font-size:clamp(21px,3vw,28px);font-weight:700;color:var(--ink);letter-spacing:-.01em;margin-top:14px}
+  section.block .count{font-family:var(--mono);font-size:12px;color:var(--sub)}
 
-  /* steps */
-  .steps{max-width:820px;margin:30px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-  .step{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:24px 22px}
-  .step .n{width:34px;height:34px;border-radius:9px;background:var(--ink);color:var(--signal);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:15px}
-  .step h4{font-size:16px;font-weight:800;color:var(--ink);margin:16px 0 7px;letter-spacing:-.01em}
-  .step p{font-size:13.5px;color:var(--steel);line-height:1.55}
-  @media (max-width:640px){.steps{grid-template-columns:1fr}}
+  /* browse — directory */
+  .browse{margin:24px 0 0;border:1px solid var(--line-strong);border-bottom:none;background:var(--panel)}
+  .row{display:flex;align-items:center;gap:16px;padding:15px 18px;border-bottom:1px solid var(--line);cursor:pointer;text-align:left;width:100%;font-family:inherit;background:transparent;transition:background .12s}
+  .row:hover{background:var(--paper)}
+  .row .rn{font-family:var(--mono);font-size:11px;color:#b7b4ab;width:26px;flex-shrink:0}
+  .row .s{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink);letter-spacing:.03em;flex-shrink:0;min-width:132px}
+  .row .t{font-size:13.5px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .row .chev{margin-left:auto;color:var(--signal);font-family:var(--mono);font-size:15px;flex-shrink:0}
+  .browse .empty,.browse .loading{padding:26px 18px;color:var(--sub);font-family:var(--mono);font-size:13px;border-bottom:1px solid var(--line)}
+  @media (max-width:560px){.row .t{display:none}.row .s{min-width:0}}
 
   /* faq */
-  .faq{max-width:720px;margin:28px auto 0;display:grid;gap:10px}
-  details.q{background:var(--paper);border:1px solid var(--line);border-radius:12px;overflow:hidden}
-  details.q summary{list-style:none;cursor:pointer;padding:18px 20px;font-weight:700;color:var(--ink);font-size:15px;display:flex;align-items:center;gap:12px}
+  .faq{margin:24px 0 0;border-top:1px solid var(--line-strong)}
+  details.q{border-bottom:1px solid var(--line-strong)}
+  details.q summary{list-style:none;cursor:pointer;padding:18px 4px;font-weight:600;color:var(--ink);font-size:15.5px;display:flex;align-items:center;gap:14px}
   details.q summary::-webkit-details-marker{display:none}
-  details.q summary::after{content:"+";margin-left:auto;color:var(--signal);font-size:22px;font-weight:600;line-height:1}
-  details.q[open] summary::after{content:"\2212"}
-  details.q .a{padding:0 20px 20px;color:var(--steel);font-size:14px;line-height:1.6}
+  details.q summary::before{content:"+";color:var(--signal);font-family:var(--mono);font-size:18px;font-weight:600;line-height:1;flex-shrink:0}
+  details.q[open] summary::before{content:"\2013"}
+  details.q .a{padding:0 4px 20px 32px;color:var(--sub);font-size:14px;line-height:1.65;max-width:64ch}
 
-  /* footer / contact */
-  footer{background:var(--paper);border-top:1px solid var(--line);padding:48px 0;text-align:center}
-  footer .cta{font-size:clamp(20px,3.4vw,26px);font-weight:800;color:var(--ink);letter-spacing:-.01em}
-  footer p.sub{color:var(--steel);font-size:14px;margin:12px auto 0;max-width:44ch}
-  footer .contact{display:inline-flex;margin-top:22px}
-  footer .fine{margin-top:34px;font-size:12px;color:var(--steel)}
-  footer .fine a{color:var(--steel);text-decoration:none;margin:0 8px}
+  /* footer */
+  footer{padding:clamp(44px,6vw,64px) 0 40px}
+  footer .cta{font-family:var(--cond);font-size:clamp(22px,3.4vw,32px);font-weight:700;color:var(--ink);letter-spacing:-.01em;max-width:18ch}
+  footer p.sub{color:var(--sub);font-size:14.5px;margin:14px 0 0;max-width:46ch;line-height:1.6}
+  footer .contact{margin-top:22px}
+  footer .fine{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--sub);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
+  footer .fine a{text-decoration:none;color:var(--sub)}
   footer .fine a:hover{color:var(--ink)}
+  footer .fine .push{margin-left:auto}
 
   .hidden{display:none!important}
-  .spin{width:18px;height:18px;border:2.5px solid rgba(127,127,127,.3);border-top-color:var(--signal);border-radius:50%;display:inline-block;animation:sp .7s linear infinite;vertical-align:-3px}
+  .spin{width:15px;height:15px;border:2px solid rgba(120,120,120,.28);border-top-color:var(--signal);border-radius:50%;display:inline-block;animation:sp .7s linear infinite;vertical-align:-2px}
   @keyframes sp{to{transform:rotate(360deg)}}
 </style>
 </head>
@@ -140,57 +158,67 @@
       <span class="tagline">Spec Lookup</span>
     </a>
     <span class="spacer"></span>
-    <a class="toplink" href="#browse">Browse reports</a>
+    <a class="status" id="status" href="#browse"><span class="dot"></span><span class="txt">Catalogue</span></a>
   </div>
 </header>
 
 <a id="top"></a>
 <section class="hero">
   <div class="wrap">
-    <div class="eyebrow">RF Cable Assembly Test Reports</div>
-    <h1>Look up any Northcomm cable's spec sheet.</h1>
-    <p>Enter the serial number printed on the assembly's label to open its factory sweep report and RF test specs. It's the same document that shipped with the cable.</p>
-    <form class="searchbox" id="searchForm" autocomplete="off">
-      <input id="q" name="q" inputmode="text" spellcheck="false" placeholder="e.g. NC-121483" aria-label="Serial number">
-      <button type="submit" id="goBtn">Find report</button>
-    </form>
-    <div class="hint">Serials look like <b>NC-121483</b>. Dashes, spaces and case don't matter.</div>
+    <div class="idx"><b>01</b> / Serial lookup</div>
+    <h1>Pull the sweep report for <em>any assembly</em> we ship.</h1>
+    <p class="lede">Every Northcomm RF cable leaves the bench with a serialized test report. Type the serial off the label and read it here, the same document that shipped in the box.</p>
+
+    <div class="console">
+      <div class="clabel"><span>Enter serial number</span><span id="clabelReady">NC-</span></div>
+      <form class="searchbox" id="searchForm" autocomplete="off">
+        <span class="sn">SN</span>
+        <input id="q" name="q" inputmode="text" spellcheck="false" placeholder="121483" aria-label="Serial number">
+        <button type="submit" id="goBtn">Retrieve</button>
+      </form>
+    </div>
+    <div class="hint">Dashes, spaces and case are ignored. Try <b>NC-121483</b>.</div>
     <div class="result hidden" id="result" aria-live="polite"></div>
   </div>
 </section>
 
-<section class="block" id="browse" style="background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)">
+<section class="block" id="browse">
   <div class="wrap">
-    <h3>On file now</h3>
-    <p class="lead">Every report Northcomm has published.</p>
+    <div class="idx"><b>02</b> / On file</div>
+    <div class="head-row">
+      <h3>Published reports</h3>
+      <span class="count" id="browseCount"></span>
+    </div>
     <div class="browse" id="browse">
-      <div class="loading"><span class="spin"></span>&nbsp; Loading reports…</div>
+      <div class="loading"><span class="spin"></span>&nbsp; Reading catalogue&hellip;</div>
     </div>
   </div>
 </section>
 
 <section class="block" id="faq">
   <div class="wrap">
-    <h3>Questions</h3>
-    <p class="lead">Good to know.</p>
+    <div class="idx"><b>03</b> / Notes</div>
     <div class="faq">
-      <details class="q"><summary>Where do I find the serial number?</summary><div class="a">It's printed on the label attached to the cable assembly, usually beginning with "NC" followed by a number, for example NC-121483. Some labels also carry a QR code that opens the report directly.</div></details>
-      <details class="q"><summary>My serial isn't found. What now?</summary><div class="a">Double-check the digits against the label. If it still isn't found, the report may not be published yet. Reach out and Northcomm will confirm the assembly and upload its report.</div></details>
-      <details class="q"><summary>What's in a report?</summary><div class="a">Each report is the factory sweep test for that exact assembly: VSWR and insertion loss across the swept frequency range, the pass/fail result, and the test date. The full PDF is the document that shipped with the cable.</div></details>
-      <details class="q"><summary>Do I need an account?</summary><div class="a">No. Anyone with a serial number can look up its published report here in the browser. No sign-in required.</div></details>
+      <details class="q"><summary>Where is the serial number?</summary><div class="a">Printed on the label attached to the cable assembly, starting with "NC" and a number, for example NC-121483. Some labels also carry a QR code that opens the report directly.</div></details>
+      <details class="q"><summary>The serial isn't found.</summary><div class="a">Check the digits against the label. If it still isn't here, the report may not be published yet. Reach out and Northcomm will confirm the assembly and upload it.</div></details>
+      <details class="q"><summary>What's in a report?</summary><div class="a">The factory sweep test for that exact assembly: VSWR and insertion loss across the swept range, the pass or fail result, and the test date. The PDF is the document that shipped with the cable.</div></details>
+      <details class="q"><summary>Do I need an account?</summary><div class="a">No. Anyone with a serial can pull its published report here. No sign-in.</div></details>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <div class="cta">Can't find a report?</div>
-    <p class="sub">If a serial isn't on file yet, get in touch and Northcomm will track down the assembly and publish its test report.</p>
-    <a class="btn btn-primary contact" href="#" id="contactBtn">Contact us</a>
+    <div class="idx"><b>04</b> / Missing report</div>
+    <div style="margin-top:16px" class="cta">A serial with no report on file?</div>
+    <p class="sub">Send it over. Northcomm will locate the assembly and publish its test report.</p>
+    <a class="btn btn-primary contact" href="#" id="contactBtn">Request a report</a>
     <div class="fine">
-      Northcomm Technologies · RF cable assembly test documentation
-      <br><br>
-      <a href="privacy.html">Privacy</a> · <a href="support.html">Support</a>
+      <span>Northcomm Technologies</span>
+      <span>RF cable assembly test records</span>
+      <span class="push"></span>
+      <a href="privacy.html">Privacy</a>
+      <a href="support.html">Support</a>
     </div>
   </div>
 </footer>
@@ -224,12 +252,17 @@
     try{
       var all = await supa.from("northcomm_parts").select(PART_COLS);
       var rows = (all && all.data) || [];
-      // exact tidy match anywhere in serial
       var hit = rows.find(function(r){return tidy(r.serial)===want;});
       if(hit) return hit;
-      // known serial found inside the scanned text
+      // a known serial appears inside the typed/scanned text (e.g. wrapped label text)
       hit = rows.find(function(r){var t=tidy(r.serial); return t && want.indexOf(t)>=0;});
-      return hit || null;
+      if(hit) return hit;
+      // the typed digits appear inside a serial (e.g. "121483" -> "NC121483"), long enough to be unambiguous
+      if(want.length>=4){
+        var matches = rows.filter(function(r){var t=tidy(r.serial); return t && t.indexOf(want)>=0;});
+        if(matches.length===1) return matches[0];
+      }
+      return null;
     }catch(e){ return null; }
   }
 
@@ -249,13 +282,13 @@
     var html =
       "<div class='card'>"+
         "<div class='head'>"+
-          "<div><div class='ser'>"+esc(row.serial)+"</div><h2>"+esc(row.title||"Test Report")+"</h2></div>"+
+          "<div class='meta'><div class='ser'>"+esc(row.serial)+"</div><h2>"+esc(row.title||"Test Report")+"</h2></div>"+
           "<span class='badge "+badgeClass+"'>"+esc(badgeTxt)+"</span>"+
         "</div>"+
         specRows(row.specs)+
         "<div class='foot'>"+
-          (href?"<a class='btn btn-primary' href='"+esc(href)+"' target='_blank' rel='noopener'>Open full report (PDF)</a>":"<span style='color:var(--steel);font-size:13.5px'>Specs on file. Full PDF not uploaded yet.</span>")+
-          "<button class='btn btn-ghost' id='againBtn'>Look up another</button>"+
+          (href?"<a class='btn btn-primary' href='"+esc(href)+"' target='_blank' rel='noopener'>Open full report</a>":"<span style='color:var(--sub);font-family:var(--mono);font-size:12.5px'>Specs on file. Full PDF not uploaded yet.</span>")+
+          "<button class='btn btn-ghost' id='againBtn'>New lookup</button>"+
         "</div>"+
       "</div>";
     show(html);
@@ -263,8 +296,8 @@
   }
 
   function renderNotFound(typed){
-    show("<div class='notice'><div class='big'>No report on file for “"+esc(typed)+"”.</div>"+
-      "Check the serial against the label and try again. If it still isn't here, the report may not be published yet. <a href='#' id='nf-contact' style='color:var(--signal);font-weight:700'>Let Northcomm know</a> and they'll upload it."+
+    show("<div class='notice'><div class='big'>No report on file for &ldquo;"+esc(typed)+"&rdquo;</div>"+
+      "Check the serial against the label and try again. If it still isn't here, the report may not be published yet. <a href='#' id='nf-contact' style='color:var(--signal);font-weight:600'>Let Northcomm know</a> and they'll upload it."+
       "<div style='margin-top:18px'><button class='btn btn-ghost' id='againBtn'>Try again</button></div></div>");
     var again=$("againBtn"); if(again) again.onclick=reset;
     var c=$("nf-contact"); if(c) c.onclick=function(e){e.preventDefault();contact();};
@@ -276,8 +309,8 @@
   async function run(typed){
     typed=(typed||"").trim();
     if(!typed) return;
-    var go=$("goBtn"); go.disabled=true; var label=go.textContent; go.textContent="Searching…";
-    show("<div class='notice'><span class='spin'></span>&nbsp; Searching the catalogue…</div>");
+    var go=$("goBtn"); go.disabled=true; var label=go.textContent; go.textContent="…";
+    show("<div class='notice'><span class='spin'></span>&nbsp; Reading catalogue&hellip;</div>");
     var row = await findPartRow(typed);
     go.disabled=false; go.textContent=label;
     if(row) renderFound(row,typed); else renderNotFound(typed);
@@ -287,21 +320,25 @@
   // ---- browse all ----
   async function loadBrowse(){
     var wrap=$("browse");
-    if(!supa){ wrap.innerHTML="<div class='empty'>Catalogue unavailable right now. Please try again shortly.</div>"; return; }
+    if(!supa){ wrap.innerHTML="<div class='empty'>Catalogue unavailable right now. Try again shortly.</div>"; return; }
     try{
       var r = await supa.from("northcomm_parts").select("serial,title,result").order("serial");
       var rows=(r && r.data)||[];
       if(!rows.length){ wrap.innerHTML="<div class='empty'>No reports on file yet.</div>"; return; }
-      wrap.innerHTML = rows.map(function(row){
+      var st=$("status"); if(st){ st.classList.add("live"); }
+      var bc=$("browseCount"); if(bc){ bc.textContent = rows.length + (rows.length===1?" report":" reports"); }
+      wrap.innerHTML = rows.map(function(row,i){
+        var n=("0"+(i+1)).slice(-2);
         return "<button class='row' data-s='"+esc(row.serial)+"'>"+
-          "<span class='tag'></span>"+
-          "<span><span class='t'>"+esc(row.title||"Test Report")+"</span><span class='s'>"+esc(row.serial)+"</span></span>"+
-          "<span class='chev'>›</span></button>";
+          "<span class='rn'>"+n+"</span>"+
+          "<span class='s'>"+esc(row.serial)+"</span>"+
+          "<span class='t'>"+esc(row.title||"Test Report")+"</span>"+
+          "<span class='chev'>&rarr;</span></button>";
       }).join("");
       Array.prototype.forEach.call(wrap.querySelectorAll(".row"),function(b){
         b.onclick=function(){ var s=b.getAttribute("data-s"); $("q").value=s; run(s); window.scrollTo({top:0,behavior:"smooth"}); };
       });
-    }catch(e){ wrap.innerHTML="<div class='empty'>Couldn't load the catalogue. Please try again shortly.</div>"; }
+    }catch(e){ wrap.innerHTML="<div class='empty'>Couldn't load the catalogue. Try again shortly.</div>"; }
   }
 
   function contact(){
@@ -314,7 +351,6 @@
   $("contactBtn").addEventListener("click",function(e){ e.preventDefault(); contact(); });
   loadBrowse();
 
-  // deep link ?s= or #s=
   (function deep(){
     var m=/[#?]s=([^&]+)/.exec(location.href);
     if(m){ try{ var s=decodeURIComponent(m[1]); $("q").value=s; run(s); }catch(e){} }
