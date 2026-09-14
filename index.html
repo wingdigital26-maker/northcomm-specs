@@ -307,7 +307,7 @@
     typed=(typed||"").trim();
     if(!typed) return;
     var go=$("goBtn"); go.disabled=true; var label=go.textContent; go.textContent="…";
-    show("<div class='notice'><span class='spin'></span>&nbsp; Reading catalogue&hellip;</div>");
+    show("<div class='notice'><span class='spin'></span>&nbsp; Retrieving report&hellip;</div>");
     var row = await findPartRow(typed);
     go.disabled=false; go.textContent=label;
     if(row) renderFound(row,typed); else renderNotFound(typed);
