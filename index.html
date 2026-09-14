@@ -50,10 +50,9 @@
   .brand .logo{height:24px;width:auto;display:block}
   .brand .tagline{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--sub);padding-left:12px;border-left:1px solid var(--line-strong)}
   .topbar .spacer{flex:1}
-  .status{font-family:var(--mono);font-size:11.5px;color:var(--sub);display:flex;align-items:center;gap:7px;text-decoration:none}
-  .status .dot{width:7px;height:7px;border-radius:50%;background:#c9c6bd}
-  .status.live .dot{background:var(--pass);box-shadow:0 0 0 3px color-mix(in srgb,var(--pass) 20%,transparent)}
-  @media (max-width:600px){.brand .tagline{display:none}.status .txt{display:none}}
+  .toplink{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--sub);text-decoration:none;padding:8px 4px}
+  .toplink:hover{color:var(--ink)}
+  @media (max-width:600px){.brand .tagline{display:none}}
 
   /* hero */
   .hero{position:relative;border-bottom:1px solid var(--line-strong);overflow:hidden}
@@ -158,7 +157,7 @@
       <span class="tagline">Spec Lookup</span>
     </a>
     <span class="spacer"></span>
-    <a class="status" id="status" href="#browse"><span class="dot"></span><span class="txt">Catalogue</span></a>
+    <a class="toplink" href="#browse">Browse reports</a>
   </div>
 </header>
 
@@ -325,7 +324,6 @@
       var r = await supa.from("northcomm_parts").select("serial,title,result").order("serial");
       var rows=(r && r.data)||[];
       if(!rows.length){ wrap.innerHTML="<div class='empty'>No reports on file yet.</div>"; return; }
-      var st=$("status"); if(st){ st.classList.add("live"); }
       var bc=$("browseCount"); if(bc){ bc.textContent = rows.length + (rows.length===1?" report":" reports"); }
       wrap.innerHTML = rows.map(function(row,i){
         var n=("0"+(i+1)).slice(-2);
