@@ -216,11 +216,6 @@
 
   // ---- lookup ----
   async function findPartRow(serial){
-    if(!supa) return null;
-    try{
-      var r = await supa.rpc("lookup_report",{scanned:serial});
-      if(!r.error && r.data){ return Array.isArray(r.data)?r.data[0]:r.data; }
-    }catch(e){}
     return await matchLocally(serial);
   }
   async function matchLocally(serial){
