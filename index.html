@@ -44,7 +44,7 @@
   .idx::after{content:"";flex:1;height:1px;background:var(--line)}
 
   /* top bar */
-  .topbar{position:sticky;top:0;z-index:20;background:rgba(251,250,247,.92);backdrop-filter:saturate(1.1) blur(6px);border-bottom:1px solid var(--line-strong)}
+  .topbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line-strong)}
   .topbar .wrap{display:flex;align-items:center;gap:14px;height:58px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
   .brand .logo{height:24px;width:auto;display:block}
@@ -114,20 +114,9 @@
 
   /* sections */
   section.block{padding:clamp(44px,6vw,64px) 0;border-bottom:1px solid var(--line-strong)}
-  section.block .head-row{display:flex;align-items:baseline;justify-content:space-between;gap:16px}
   section.block h3{font-family:var(--cond);font-size:clamp(21px,3vw,28px);font-weight:700;color:var(--ink);letter-spacing:-.01em;margin-top:14px}
-  section.block .count{font-family:var(--mono);font-size:12px;color:var(--sub)}
 
   /* browse: directory */
-  .browse{margin:24px 0 0;border:1px solid var(--line-strong);border-bottom:none;background:var(--panel)}
-  .row{display:flex;align-items:center;gap:16px;padding:15px 18px;border-bottom:1px solid var(--line);cursor:pointer;text-align:left;width:100%;font-family:inherit;background:transparent;transition:background .12s}
-  .row:hover{background:var(--paper)}
-  .row .rn{font-family:var(--mono);font-size:11px;color:#767368;width:26px;flex-shrink:0}
-  .row .s{font-family:var(--mono);font-size:14px;font-weight:600;color:var(--ink);letter-spacing:.03em;flex-shrink:0;min-width:132px}
-  .row .t{font-size:13.5px;color:var(--sub);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-  .row .chev{margin-left:auto;color:var(--signal);font-family:var(--mono);font-size:15px;flex-shrink:0}
-  .browse .empty,.browse .loading{padding:26px 18px;color:var(--sub);font-family:var(--mono);font-size:13px;border-bottom:1px solid var(--line)}
-  @media (max-width:560px){.row .t{display:none}.row .s{min-width:0}}
 
   /* faq */
   .faq{margin:24px 0 0;border-top:1px solid var(--line-strong)}
@@ -162,7 +151,6 @@
       <span class="tagline">Spec Lookup</span>
     </a>
     <span class="spacer"></span>
-    <a class="toplink" href="#browse">Browse reports</a>
   </div>
 </header>
 
@@ -177,33 +165,20 @@
       <div class="clabel"><span>Enter serial number</span><span id="clabelReady">NC-</span></div>
       <form class="searchbox" id="searchForm" autocomplete="off">
         <span class="sn">SN</span>
-        <input id="q" name="q" inputmode="text" spellcheck="false" placeholder="121483" aria-label="Serial number">
+        <input id="q" name="q" inputmode="text" spellcheck="false" placeholder="000000" aria-label="Serial number">
         <button type="submit" id="goBtn">Retrieve</button>
       </form>
     </div>
-    <div class="hint">Dashes, spaces and case are ignored. Try <b>NC-121483</b>.</div>
+    <div class="hint">Enter the full serial from the label. Dashes, spaces and case are ignored.</div>
     <div class="result hidden" id="result" aria-live="polite"></div>
-  </div>
-</section>
-
-<section class="block" id="browse">
-  <div class="wrap">
-    <div class="idx"><b>02</b> / On file</div>
-    <div class="head-row">
-      <h3>Published reports</h3>
-      <span class="count" id="browseCount"></span>
-    </div>
-    <div class="browse" id="browseList">
-      <div class="loading"><span class="spin"></span>&nbsp; Reading catalogue&hellip;</div>
-    </div>
   </div>
 </section>
 
 <section class="block" id="faq">
   <div class="wrap">
-    <div class="idx"><b>03</b> / Notes</div>
+    <div class="idx"><b>02</b> / Notes</div>
     <div class="faq">
-      <details class="q"><summary>Where is the serial number?</summary><div class="a">Printed on the label attached to the cable assembly, starting with "NC" and a number, for example NC-121483. Some labels also carry a QR code that opens the report directly.</div></details>
+      <details class="q"><summary>Where is the serial number?</summary><div class="a">Printed on the label attached to the cable assembly, starting with "NC" and a number. Some labels also carry a QR code that opens the report directly.</div></details>
       <details class="q"><summary>The serial isn't found.</summary><div class="a">Check the digits against the label. If it still isn't here, the report may not be published yet. Reach out and Northcomm will confirm the assembly and upload it.</div></details>
       <details class="q"><summary>What's in a report?</summary><div class="a">The factory sweep test for that exact assembly: VSWR and insertion loss across the swept range, the pass or fail result, and the test date. The PDF is the document that shipped with the cable.</div></details>
       <details class="q"><summary>Do I need an account?</summary><div class="a">No. Anyone with a serial can pull its published report here. No sign-in.</div></details>
@@ -213,7 +188,7 @@
 
 <footer>
   <div class="wrap">
-    <div class="idx"><b>04</b> / Missing report</div>
+    <div class="idx"><b>03</b> / Missing report</div>
     <div style="margin-top:16px" class="cta">A serial with no report on file?</div>
     <p class="sub">Send it over. Northcomm will locate the assembly and publish its test report.</p>
     <a class="btn btn-primary contact" href="#" id="contactBtn">Request a report</a>
@@ -234,18 +209,6 @@
       SUPA_ANON="sb_publishable_AdF68UbmD9I5YShLpPc8UA_mNSnyiNe";
   var PART_COLS="serial,title,pdf_url,result,specs";
 
-  // Plain PostgREST read against the same public catalogue endpoint the
-  // supabase-js client used to hit. Returns the row array, or null on failure
-  // (matching the old null-guarded behaviour of the removed client).
-  function rest(select, order){
-    var url = SUPA_URL + "/rest/v1/northcomm_parts?select=" + encodeURIComponent(select);
-    if(order) url += "&order=" + encodeURIComponent(order);
-    return fetch(url, { headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON } })
-      .then(function(res){ return res.ok ? res.json() : null; })
-      .then(function(data){ return Array.isArray(data) ? data : null; })
-      .catch(function(){ return null; });
-  }
-
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
   function tidy(s){return String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,"");}
   function $(id){return document.getElementById(id);}
@@ -257,25 +220,24 @@
   }
 
   // ---- lookup ----
+  // Query the catalogue filtered by the exact number the user typed, so the
+  // response only ever contains that one file. The full list is never
+  // downloaded and cannot be browsed: a report is reachable only by its serial.
   async function findPartRow(serial){
-    return await matchLocally(serial);
-  }
-  async function matchLocally(serial){
     var want = tidy(serial);
+    var digits = want.replace(/[^0-9]/g,"");
+    var key = digits.length>=4 ? digits : want;   // sanitized to [A-Z0-9], safe inside the filter
+    if(key.length < 4) return null;               // too short to identify a specific file
+    var url = SUPA_URL + "/rest/v1/northcomm_parts?select=" + encodeURIComponent(PART_COLS) +
+              "&serial=ilike.*" + encodeURIComponent(key) + "*&limit=3";
     try{
-      var rows = await rest(PART_COLS);
-      if(!rows) return null;
-      var hit = rows.find(function(r){return tidy(r.serial)===want;});
-      if(hit) return hit;
-      // a known serial appears inside the typed/scanned text (e.g. wrapped label text)
-      hit = rows.find(function(r){var t=tidy(r.serial); return t && want.indexOf(t)>=0;});
-      if(hit) return hit;
-      // the typed digits appear inside a serial (e.g. "121483" -> "NC121483"), long enough to be unambiguous
-      if(want.length>=4){
-        var matches = rows.filter(function(r){var t=tidy(r.serial); return t && t.indexOf(want)>=0;});
-        if(matches.length===1) return matches[0];
-      }
-      return null;
+      var res = await fetch(url, { headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON } });
+      if(!res.ok) return null;
+      var rows = await res.json();
+      if(!Array.isArray(rows) || !rows.length) return null;
+      var exact = rows.find(function(r){ return tidy(r.serial)===want; });
+      if(exact) return exact;
+      return rows.length===1 ? rows[0] : null;    // ambiguous partial is not a unique file
     }catch(e){ return null; }
   }
 
@@ -352,30 +314,6 @@
     try{ history.replaceState(null,"", "#s=" + encodeURIComponent(typed)); }catch(e){}
   }
 
-  // ---- browse all ----
-  async function loadBrowse(){
-    var wrap=$("browseList");
-    try{
-      var rows = await rest("serial,title,result","serial");
-      if(!rows){ wrap.innerHTML="<div class='empty'>Catalogue unavailable right now. Try again shortly.</div>"; return; }
-      if(!rows.length){ wrap.innerHTML="<div class='empty'>No reports on file yet.</div>"; return; }
-      // order by the numeric part of the serial so "NC-121483" and "NC - 121484" sort naturally
-      rows.sort(function(a,b){ var na=parseInt(tidy(a.serial).replace(/\D/g,""),10)||0, nb=parseInt(tidy(b.serial).replace(/\D/g,""),10)||0; return na-nb || tidy(a.serial).localeCompare(tidy(b.serial)); });
-      var bc=$("browseCount"); if(bc){ bc.textContent = rows.length + (rows.length===1?" report":" reports"); }
-      wrap.innerHTML = rows.map(function(row,i){
-        var n=("0"+(i+1)).slice(-2);
-        return "<button class='row' data-s='"+esc(row.serial)+"'>"+
-          "<span class='rn'>"+n+"</span>"+
-          "<span class='s'>"+esc(row.serial)+"</span>"+
-          "<span class='t'>"+esc(row.title||"Test Report")+"</span>"+
-          "<span class='chev'>&rarr;</span></button>";
-      }).join("");
-      Array.prototype.forEach.call(wrap.querySelectorAll(".row"),function(b){
-        b.onclick=function(){ var s=b.getAttribute("data-s"); $("q").value=s; run(s); window.scrollTo({top:0,behavior:"smooth"}); };
-      });
-    }catch(e){ wrap.innerHTML="<div class='empty'>Couldn't load the catalogue. Try again shortly.</div>"; }
-  }
-
   function contact(){
     window.location.href = "mailto:?subject=" + encodeURIComponent("Northcomm cable report request") +
       "&body=" + encodeURIComponent("Hi Northcomm,\n\nI'm looking for the test report for this assembly:\n\nSerial: \n\nThanks.");
@@ -384,7 +322,6 @@
   // ---- wire up ----
   $("searchForm").addEventListener("submit",function(e){ e.preventDefault(); run($("q").value); });
   $("contactBtn").addEventListener("click",function(e){ e.preventDefault(); contact(); });
-  loadBrowse();
 
   (function deep(){
     var m=/[#?]s=([^&]+)/.exec(location.href);
