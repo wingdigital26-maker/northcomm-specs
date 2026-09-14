@@ -193,7 +193,7 @@
       <h3>Published reports</h3>
       <span class="count" id="browseCount"></span>
     </div>
-    <div class="browse" id="browse">
+    <div class="browse" id="browseList">
       <div class="loading"><span class="spin"></span>&nbsp; Reading catalogue&hellip;</div>
     </div>
   </div>
@@ -227,14 +227,24 @@
   </div>
 </footer>
 
-<script src="vendor-supabase.min.js"></script>
 <script>
 (function(){
   "use strict";
   var SUPA_URL="https://ocassdfsueyxwkpvspym.supabase.co",
       SUPA_ANON="sb_publishable_AdF68UbmD9I5YShLpPc8UA_mNSnyiNe";
-  var supa = (window.supabase && window.supabase.createClient) ? window.supabase.createClient(SUPA_URL,SUPA_ANON) : null;
   var PART_COLS="serial,title,pdf_url,result,specs";
+
+  // Plain PostgREST read against the same public catalogue endpoint the
+  // supabase-js client used to hit. Returns the row array, or null on failure
+  // (matching the old null-guarded behaviour of the removed client).
+  function rest(select, order){
+    var url = SUPA_URL + "/rest/v1/northcomm_parts?select=" + encodeURIComponent(select);
+    if(order) url += "&order=" + encodeURIComponent(order);
+    return fetch(url, { headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON } })
+      .then(function(res){ return res.ok ? res.json() : null; })
+      .then(function(data){ return Array.isArray(data) ? data : null; })
+      .catch(function(){ return null; });
+  }
 
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
   function tidy(s){return String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,"");}
@@ -251,11 +261,10 @@
     return await matchLocally(serial);
   }
   async function matchLocally(serial){
-    if(!supa) return null;
     var want = tidy(serial);
     try{
-      var all = await supa.from("northcomm_parts").select(PART_COLS);
-      var rows = (all && all.data) || [];
+      var rows = await rest(PART_COLS);
+      if(!rows) return null;
       var hit = rows.find(function(r){return tidy(r.serial)===want;});
       if(hit) return hit;
       // a known serial appears inside the typed/scanned text (e.g. wrapped label text)
@@ -336,12 +345,13 @@
 
   // ---- browse all ----
   async function loadBrowse(){
-    var wrap=$("browse");
-    if(!supa){ wrap.innerHTML="<div class='empty'>Catalogue unavailable right now. Try again shortly.</div>"; return; }
+    var wrap=$("browseList");
     try{
-      var r = await supa.from("northcomm_parts").select("serial,title,result").order("serial");
-      var rows=(r && r.data)||[];
+      var rows = await rest("serial,title,result","serial");
+      if(!rows){ wrap.innerHTML="<div class='empty'>Catalogue unavailable right now. Try again shortly.</div>"; return; }
       if(!rows.length){ wrap.innerHTML="<div class='empty'>No reports on file yet.</div>"; return; }
+      // order by the numeric part of the serial so "NC-121483" and "NC - 121484" sort naturally
+      rows.sort(function(a,b){ var na=parseInt(tidy(a.serial).replace(/\D/g,""),10)||0, nb=parseInt(tidy(b.serial).replace(/\D/g,""),10)||0; return na-nb || tidy(a.serial).localeCompare(tidy(b.serial)); });
       var bc=$("browseCount"); if(bc){ bc.textContent = rows.length + (rows.length===1?" report":" reports"); }
       wrap.innerHTML = rows.map(function(row,i){
         var n=("0"+(i+1)).slice(-2);
