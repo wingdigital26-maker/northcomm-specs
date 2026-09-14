@@ -101,7 +101,9 @@
   .card .viewer{border-top:1px solid var(--line);background:#efece6}
   .card .vhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 20px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
   .card .vhead .vhint{letter-spacing:.02em;text-transform:none;color:var(--sub)}
+  .card .pdfwrap{position:relative}
   .card .pdfview{display:block;width:100%;height:clamp(440px,74vh,900px);border:0;background:#efece6}
+  .card .pdfloading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--sub);background:#efece6;pointer-events:none}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;font-family:var(--cond);font-size:14px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;padding:13px 20px;cursor:pointer;text-decoration:none;transition:background .15s,border-color .15s}
   .btn-primary{background:var(--ink);color:#fff}
   .btn-primary:hover{background:#000}
@@ -297,13 +299,22 @@
           "<span class='badge "+badgeClass+"'>"+esc(badgeTxt)+"</span>"+
         "</div>"+
         specRows(row.specs)+
-        (href?"<div class='viewer'><div class='vhead'><span>Full sweep report</span><span class='vhint'>Loads below. Large scan, give it a moment.</span></div><iframe class='pdfview' src='"+esc(href)+"#view=FitH&toolbar=1' title='Full test report for "+esc(row.serial)+"' loading='eager'></iframe></div>":"")+
+        (href?"<div class='viewer'><div class='vhead'><span>Full sweep report</span><span class='vhint'>Loads below. Large scan, give it a moment.</span></div><div class='pdfwrap'><div class='pdfloading' id='pdfLoading'><span class='spin'></span> Loading report&hellip;</div><iframe class='pdfview' src='"+esc(href)+"#view=FitH&toolbar=1' title='Full test report for "+esc(row.serial)+"' loading='eager'></iframe></div></div>":"")+
         "<div class='foot'>"+
           (href?"<a class='btn btn-primary' href='"+esc(href)+"' target='_blank' rel='noopener noreferrer' id='openBtn'>Open full screen</a>":"<span style='color:var(--sub);font-family:var(--mono);font-size:12.5px'>Specs on file. Full PDF not uploaded yet.</span>")+
           "<button class='btn btn-ghost' id='againBtn'>New lookup</button>"+
         "</div>"+
       "</div>";
     show(html);
+    // hide the viewer's loading affordance once the PDF iframe reports it has loaded;
+    // fall back on a timeout so the spinner never outlives a load event that doesn't fire
+    var pl=$("pdfLoading");
+    if(pl){
+      var frame=pl.parentNode.querySelector("iframe.pdfview");
+      var done=function(){ if(pl){ pl.classList.add("hidden"); pl=null; } };
+      if(frame) frame.addEventListener("load",done);
+      setTimeout(done,15000);
+    }
     var again=$("againBtn"); if(again) again.onclick=reset;
     var ob=$("openBtn");
     if(ob){
