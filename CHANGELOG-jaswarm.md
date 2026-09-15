@@ -41,3 +41,11 @@ Committed: 6c81564, 2548f66 · Gap closed: SEO crawlability + off-brand default 
 | safety | clean — CSS + static attributes only, no secrets/injection/new endpoints | reasoned inline (trivial surface) |
 | regression | JS handlers untouched; live app renders, no console errors; lookup form + Enter-submit intact | ids grep 4/4 present |
 Committed: 76ea9bc · Note: verifier agent stalled (watchdog), diff re-checked directly. Browse feature was removed in a8d9bc2 (exact-serial only now). Site is now near DIALED — SEO files, 404, a11y all done.
+
+## Round 6 — 2026-09-15 10:38
+| Lane | Change | Proof |
+|---|---|---|
+| content | privacy+support: removed noindex (conflicted with round-4 sitemap), added self-canonical + accurate description + theme-color + apple-touch-icon; trimmed their font imports to index.html's leaner set | diff +10 lines; both serve 200 |
+| fix | corrected support description that advertised a "browse" feature the app no longer has (exact-serial only) | grep: browse absent from body, index.html L235 confirms serial-only |
+| safety | clean — meta/link tags only | inline (no security surface) |
+Committed: edbf520 · SITE DIALED: SEO files, branded 404, full a11y, and consistent indexable meta across all 3 pages all shipped. ja/loop 6 commits ahead of master, ready to merge -> auto-deploys via Pages.
