@@ -25,3 +25,11 @@ Permanent paper trail of the /jaswarm loop. Newest at the bottom. Commits land o
 | perf | no changes needed | 2 fetches negligible at 4 rows |
 | practicality | no changes needed | all actions reachable, no dead ends |
 | safety | clean | additive CSS/JS only |
+
+## Round 4 — 2026-09-15 09:30
+| Lane | Change | Proof |
+|---|---|---|
+| content | Added robots.txt + sitemap.xml (3 real pages, lastmod 2026-09-15) + branded 404.html (mirrors privacy.html chrome/tokens/fonts) | all serve 200; sitemap XML valid; 404 renders w/ real logo + Plex fonts, no console errors |
+| fix | 404.html refs made root-absolute (/northcomm-specs/...) — Pages serves 404 at any depth, relative refs would break | verified at real subpath mount: logo + links load 200 |
+| safety | clean — no secrets, no query-string reflection/XSS in 404, links internal/legit | gate agent: "no issues found" |
+Committed: 6c81564, 2548f66 · Gap closed: SEO crawlability + off-brand default 404. Next: fine-detail pass (a11y focus states, meta completeness) or DIALED.
