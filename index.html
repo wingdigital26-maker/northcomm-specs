@@ -140,6 +140,16 @@
   .hidden{display:none!important}
   .spin{width:15px;height:15px;border:2px solid rgba(120,120,120,.28);border-top-color:var(--signal);border-radius:50%;display:inline-block;animation:sp .7s linear infinite;vertical-align:-2px}
   @keyframes sp{to{transform:rotate(360deg)}}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    .spin{animation:none;border-top-color:rgba(120,120,120,.28)}
+  }
+
+  /* keyboard focus: visible on every interactive element, off for mouse/touch */
+  a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{
+    outline:2px solid var(--signal);outline-offset:2px;
+  }
+  .searchbox input:focus-visible{outline-offset:-2px}
 </style>
 </head>
 <body>
@@ -165,7 +175,7 @@
       <div class="clabel"><span>Enter serial number</span><span id="clabelReady">NC-</span></div>
       <form class="searchbox" id="searchForm" autocomplete="off">
         <span class="sn">SN</span>
-        <input id="q" name="q" inputmode="text" spellcheck="false" placeholder="000000" aria-label="Serial number">
+        <input id="q" name="q" inputmode="text" spellcheck="false" autocapitalize="characters" autocomplete="off" enterkeyhint="search" placeholder="000000" aria-label="Serial number">
         <button type="submit" id="goBtn">Retrieve</button>
       </form>
     </div>
