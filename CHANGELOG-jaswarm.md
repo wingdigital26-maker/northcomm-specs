@@ -33,3 +33,11 @@ Permanent paper trail of the /jaswarm loop. Newest at the bottom. Commits land o
 | fix | 404.html refs made root-absolute (/northcomm-specs/...) — Pages serves 404 at any depth, relative refs would break | verified at real subpath mount: logo + links load 200 |
 | safety | clean — no secrets, no query-string reflection/XSS in 404, links internal/legit | gate agent: "no issues found" |
 Committed: 6c81564, 2548f66 · Gap closed: SEO crawlability + off-brand default 404. Next: fine-detail pass (a11y focus states, meta completeness) or DIALED.
+
+## Round 5 — 2026-09-15 09:36
+| Lane | Change | Proof |
+|---|---|---|
+| a11y | :focus-visible ring (brand --signal) on all interactive elements — none existed before; @media prefers-reduced-motion stops spinner+smooth-scroll; serial input gets autocapitalize=characters/autocomplete=off/enterkeyhint=search | diff +11 lines additive; all JS ids (#q #result #searchForm #goBtn) intact, zero renames |
+| safety | clean — CSS + static attributes only, no secrets/injection/new endpoints | reasoned inline (trivial surface) |
+| regression | JS handlers untouched; live app renders, no console errors; lookup form + Enter-submit intact | ids grep 4/4 present |
+Committed: 76ea9bc · Note: verifier agent stalled (watchdog), diff re-checked directly. Browse feature was removed in a8d9bc2 (exact-serial only now). Site is now near DIALED — SEO files, 404, a11y all done.
