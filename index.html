@@ -20,12 +20,12 @@
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#20211f; --sub:#5c5f5a; --signal:#FF3800; --signal-press:#d92f00; --signal-ink:#c72c00;
-    --paper:#fbfaf7; --panel:#ffffff; --line:#dcdad4; --line-strong:#c4c1b8;
-    --grid:#eceae3; --pass:#187a44; --fail:#c0392b;
+    --ink:#1f1e1c; --steel:#5f5e5a; --signal:#FF3800; --signal-btn:#d92f00; --signal-text:#c72c00;
+    --paper:#fbfaf7; --sheet:#ffffff; --line:#d9d6cf; --line-strong:#c4c1b8;
+    --pass:#1d6b3a; --fail:#c0392b;
     --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
     --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
     --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
@@ -36,106 +36,127 @@
   body{font-family:var(--sans);background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;line-height:1.5}
   img{max-width:100%}
   a{color:inherit}
-  .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
-
-  /* index label: 01 / LOOKUP */
-  .idx{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.05em;color:var(--sub);text-transform:uppercase;display:flex;align-items:center;gap:9px}
-  .idx b{color:var(--signal-ink);font-weight:600}
-  .idx::after{content:"";flex:1;height:1px;background:var(--line)}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
 
   /* top bar */
   .topbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line-strong)}
   .topbar .wrap{display:flex;align-items:center;gap:14px;height:58px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
   .brand .logo{height:24px;width:auto;display:block}
-  .brand .tagline{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--sub);padding-left:12px;border-left:1px solid var(--line-strong)}
+  .brand .tagline{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);padding-left:12px;border-left:1px solid var(--line-strong)}
   .topbar .spacer{flex:1}
-  .toplink{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--sub);text-decoration:none;padding:8px 4px}
-  .toplink:hover{color:var(--ink)}
   @media (max-width:600px){.brand .tagline{display:none}}
 
-  /* hero */
-  .hero{position:relative;border-bottom:1px solid var(--line-strong);overflow:hidden}
-  .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(180deg,#000 0%,transparent 78%);-webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 78%);opacity:.9;pointer-events:none}
-  .hero .wrap{position:relative;padding:clamp(40px,7vw,74px) clamp(18px,4vw,40px) clamp(34px,5vw,54px)}
-  .hero .idx{max-width:560px}
-  .hero h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,7vw,64px);line-height:.98;letter-spacing:-.015em;color:var(--ink);margin:20px 0 0;max-width:15ch}
-  .hero h1 em{font-style:normal;color:var(--signal)}
-  .hero .lede{font-size:clamp(15px,2.2vw,17px);color:var(--sub);margin:18px 0 0;max-width:50ch;line-height:1.55}
+  /* hero: fills first viewport on desktop */
+  .hero{position:relative;border-bottom:1px solid var(--line-strong)}
+  .hero .grid{display:grid;grid-template-columns:1fr;gap:44px;align-items:center;min-height:calc(100svh - 59px);padding:clamp(40px,6vw,72px) 0}
+  @media (min-width:920px){
+    .hero .grid{grid-template-columns:1fr 1fr;gap:64px}
+  }
+
+  .hero h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,5.4vw,58px);line-height:.98;letter-spacing:-.015em;color:var(--ink);max-width:15ch}
+  .hero h1 em{font-style:normal;color:var(--signal-text)}
+  .hero .lede{font-size:clamp(15px,2vw,17px);color:var(--steel);margin:20px 0 0;max-width:50ch;line-height:1.55}
 
   /* search console */
-  .console{margin:30px 0 0;max-width:620px;background:var(--panel);border:1px solid var(--line-strong);box-shadow:0 1px 0 var(--line)}
-  .console .clabel{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--sub)}
-  .console .clabel span:last-child{color:var(--signal-ink)}
+  .console{margin:30px 0 0;max-width:560px;background:var(--sheet);border:1px solid var(--line-strong)}
+  .console .clabel{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--steel)}
+  .console .clabel span:last-child{color:var(--signal-text)}
   .searchbox{display:flex;align-items:stretch}
-  .searchbox .sn{display:flex;align-items:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--sub);padding:0 14px;border-right:1px solid var(--line);background:var(--paper);letter-spacing:.05em}
+  .searchbox .sn{display:flex;align-items:center;font-family:var(--mono);font-size:13px;font-weight:600;color:var(--steel);padding:0 14px;border-right:1px solid var(--line);background:var(--paper);letter-spacing:.05em}
   .searchbox input{flex:1;min-width:0;font-family:var(--mono);font-size:clamp(16px,2vw,19px);font-weight:500;letter-spacing:.03em;padding:18px 16px;border:none;background:transparent;color:var(--ink);outline:none}
   .searchbox input::placeholder{color:#767368;font-weight:400}
-  .searchbox button{border:none;font-family:var(--cond);font-size:15px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:0 clamp(20px,3vw,34px);background:var(--signal-press);color:#fff;cursor:pointer;transition:background .15s;flex-shrink:0}
+  .searchbox button{border:none;font-family:var(--cond);font-size:15px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;padding:0 clamp(20px,3vw,34px);background:var(--signal-btn);color:#fff;cursor:pointer;transition:background .15s;flex-shrink:0}
   .searchbox button:hover{background:#b32b00}
   .searchbox button:disabled{opacity:.6;cursor:default}
   .searchbox input:focus{box-shadow:inset 0 -2px 0 var(--signal)}
-  .hint{font-family:var(--mono);font-size:12px;color:var(--sub);margin:14px 2px 0}
+  .hint{font-family:var(--mono);font-size:12px;color:var(--steel);margin:14px 2px 0}
   .hint b{color:var(--ink);font-weight:600}
 
   .result{margin:22px 0 0;max-width:660px}
   .result:empty{margin:0}
 
-  /* result card: datasheet */
-  .card{background:var(--panel);border:1px solid var(--line-strong)}
+  /* the report sheet: a real report page, cropped + faded, as a button */
+  .sheetbtn{display:block;width:100%;border:none;background:none;padding:0;cursor:pointer;text-align:left;font:inherit;color:inherit}
+  .sheetbtn:hover .sheet-frame img{transform:scale(1.012)}
+  .sheet-frame{position:relative;border:1px solid var(--line-strong);background:var(--sheet);overflow:hidden;aspect-ratio:910/680}
+  .sheet-frame img{display:block;width:100%;height:auto;transition:transform .3s ease}
+  .sheet-frame::after{content:"";position:absolute;left:0;right:0;bottom:0;height:38%;background:linear-gradient(180deg,transparent,var(--paper) 92%);pointer-events:none}
+  .sheet-cap{margin-top:12px;display:flex;align-items:baseline;justify-content:space-between;gap:12px;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;color:var(--steel)}
+  .sheet-cap b{color:var(--ink);font-weight:600}
+  @media (max-width:919px){
+    .sheet-frame{aspect-ratio:910/460}
+  }
+  @media (prefers-reduced-motion: reduce){
+    .sheetbtn:hover .sheet-frame img{transform:none}
+  }
+
+  /* result card: same sheet system */
+  .card{background:var(--sheet);border:1px solid var(--line-strong)}
   .card .head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:16px}
   .card .head .meta{min-width:0}
-  .card .head .ser{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--signal-ink);letter-spacing:.04em}
-  .card .head h2{font-family:var(--sans);font-size:16px;font-weight:600;color:var(--ink);margin-top:5px;line-height:1.25}
-  .badge{margin-left:auto;flex-shrink:0;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border:1px solid}
-  .badge.pass{color:var(--pass);border-color:color-mix(in srgb,var(--pass) 45%,transparent);background:color-mix(in srgb,var(--pass) 8%,transparent)}
-  .badge.fail{color:var(--fail);border-color:color-mix(in srgb,var(--fail) 45%,transparent);background:color-mix(in srgb,var(--fail) 8%,transparent)}
-  .badge.na{color:var(--sub);border-color:var(--line-strong);background:var(--paper)}
+  .card .head .ser{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--ink);letter-spacing:.04em}
+  .card .head h2{font-family:var(--sans);font-size:15px;font-weight:500;color:var(--steel);margin-top:4px;line-height:1.25}
+  .chip{margin-left:auto;flex-shrink:0;font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:6px 11px;border:1px solid;border-radius:2px}
+  .chip.pass{color:var(--pass);border-color:var(--pass);background:transparent}
+  .chip.fail{color:var(--fail);border-color:var(--fail);background:transparent}
+  .chip.na{color:var(--steel);border-color:var(--line-strong);background:transparent}
   table.specs{width:100%;border-collapse:collapse}
   table.specs td{padding:12px 20px;font-size:13.5px;border-bottom:1px solid var(--line)}
   table.specs tr:last-child td{border-bottom:none}
-  table.specs tr:nth-child(even){background:var(--paper)}
-  table.specs td:first-child{font-family:var(--mono);font-size:12px;color:var(--sub);width:56%;letter-spacing:.02em}
+  table.specs td:first-child{font-family:var(--mono);font-size:12px;color:var(--steel);width:56%;letter-spacing:.02em}
   table.specs td:last-child{text-align:right;font-family:var(--mono);color:var(--ink);font-weight:600}
   .card .foot{padding:16px 20px;display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);background:var(--paper)}
   .card .viewer{border-top:1px solid var(--line);background:#efece6}
-  .card .vhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 20px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
-  .card .vhead .vhint{letter-spacing:.02em;text-transform:none;color:var(--sub)}
+  .card .vhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 20px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel)}
+  .card .vhead .vhint{letter-spacing:.02em;text-transform:none;color:var(--steel)}
   .card .pdfwrap{position:relative}
   .card .pdfview{display:block;width:100%;height:clamp(440px,74vh,900px);border:0;background:#efece6}
-  .card .pdfloading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--sub);background:#efece6;pointer-events:none}
+  .card .pdfloading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--steel);background:#efece6;pointer-events:none}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;font-family:var(--cond);font-size:14px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;padding:13px 20px;cursor:pointer;text-decoration:none;transition:background .15s,border-color .15s}
-  .btn-primary{background:var(--ink);color:#fff}
-  .btn-primary:hover{background:#000}
+  .btn-primary{background:var(--signal-btn);color:#fff}
+  .btn-primary:hover{background:#b32b00}
   .btn-ghost{background:transparent;color:var(--ink);border:1px solid var(--line-strong)}
   .btn-ghost:hover{border-color:var(--ink)}
-  .notice{background:var(--panel);border:1px solid var(--line-strong);padding:22px 20px;color:var(--sub);font-size:13.5px;line-height:1.6}
+  .notice{background:var(--sheet);border:1px solid var(--line-strong);padding:22px 20px;color:var(--steel);font-size:13.5px;line-height:1.6}
   .notice .big{font-family:var(--cond);font-size:18px;font-weight:700;color:var(--ink);margin-bottom:6px;letter-spacing:-.01em}
 
   /* sections */
   section.block{padding:clamp(44px,6vw,64px) 0;border-bottom:1px solid var(--line-strong)}
-  section.block h3{font-family:var(--cond);font-size:clamp(21px,3vw,28px);font-weight:700;color:var(--ink);letter-spacing:-.01em;margin-top:14px}
+  section.block h3{font-family:var(--cond);font-size:clamp(21px,3vw,28px);font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.1;margin-bottom:6px}
 
-  /* browse: directory */
+  /* two-column band: notes (faq) + request-a-report sheet */
+  .band{display:grid;grid-template-columns:1fr;gap:48px}
+  @media (min-width:860px){
+    .band{grid-template-columns:minmax(0,620px) 1fr}
+  }
+  .band .col-notes{max-width:620px}
+  .band .col-request .req-sheet{background:var(--sheet);border:1px solid var(--line-strong);padding:28px clamp(20px,3vw,32px)}
+  .band .col-request .req-sheet .cta{font-family:var(--cond);font-size:clamp(20px,3vw,26px);font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.1}
+  .band .col-request .req-sheet p.sub{color:var(--steel);font-size:14.5px;margin:14px 0 0;max-width:44ch;line-height:1.6}
+  .band .col-request .req-sheet .contact{margin-top:20px}
 
   /* faq */
-  .faq{margin:24px 0 0;border-top:1px solid var(--line-strong)}
+  .faq{border-top:1px solid var(--line-strong)}
   details.q{border-bottom:1px solid var(--line-strong)}
   details.q summary{list-style:none;cursor:pointer;padding:18px 4px;font-weight:600;color:var(--ink);font-size:15.5px;display:flex;align-items:center;gap:14px}
   details.q summary::-webkit-details-marker{display:none}
-  details.q summary::before{content:"+";color:var(--signal);font-family:var(--mono);font-size:18px;font-weight:600;line-height:1;flex-shrink:0}
+  details.q summary::before{content:"+";color:var(--signal-text);font-family:var(--mono);font-size:18px;font-weight:600;line-height:1;flex-shrink:0}
   details.q[open] summary::before{content:"\2013"}
-  details.q .a{padding:0 4px 20px 32px;color:var(--sub);font-size:14px;line-height:1.65;max-width:64ch}
+  details.q .a{padding:0 4px 20px 32px;color:var(--steel);font-size:14px;line-height:1.65;max-width:64ch}
 
-  /* footer */
+  /* footer: one tidy row on desktop, clean stack on mobile */
   footer{padding:clamp(44px,6vw,64px) 0 40px}
-  footer .cta{font-family:var(--cond);font-size:clamp(22px,3.4vw,32px);font-weight:700;color:var(--ink);letter-spacing:-.01em;max-width:18ch}
-  footer p.sub{color:var(--sub);font-size:14.5px;margin:14px 0 0;max-width:46ch;line-height:1.6}
-  footer .contact{margin-top:22px}
-  footer .fine{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--sub);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
-  footer .fine a{text-decoration:none;color:var(--sub)}
+  footer .fine{padding-top:20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--steel);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
+  footer .fine a{text-decoration:none;color:var(--steel)}
   footer .fine a:hover{color:var(--ink)}
   footer .fine .push{margin-left:auto}
+  footer .fine .links{display:flex;gap:18px}
+  @media (max-width:600px){
+    footer .fine{flex-direction:column;align-items:flex-start;gap:10px}
+    footer .fine .push{margin-left:0}
+    footer .fine .links{gap:20px}
+  }
 
   .hidden{display:none!important}
   .spin{width:15px;height:15px;border:2px solid rgba(120,120,120,.28);border-top-color:var(--signal);border-radius:50%;display:inline-block;animation:sp .7s linear infinite;vertical-align:-2px}
@@ -150,6 +171,8 @@
     outline:2px solid var(--signal);outline-offset:2px;
   }
   .searchbox input:focus-visible{outline-offset:-2px}
+
+  noscript .noscript-note{display:block;max-width:660px;margin:22px 0 0;background:var(--sheet);border:1px solid var(--line-strong);padding:16px 18px;font-size:13.5px;color:var(--steel);line-height:1.6}
 </style>
 </head>
 <body>
@@ -167,47 +190,69 @@
 <a id="top"></a>
 <section class="hero">
   <div class="wrap">
-    <div class="idx"><b>01</b> / Serial lookup</div>
-    <h1>Pull the sweep report for <em>any assembly</em> we ship.</h1>
-    <p class="lede">Every Northcomm RF cable leaves the bench with a serialized test report. Type the serial off the label and read it here, the same document that shipped in the box.</p>
+    <div class="grid">
+      <div>
+        <h1>Pull the sweep report for <em>any assembly</em> we ship.</h1>
+        <p class="lede">Every Northcomm RF cable leaves the bench with a serialized test report. Type the serial off the label and read it here, the same document that shipped in the box.</p>
 
-    <div class="console">
-      <div class="clabel"><span>Enter serial number</span><span id="clabelReady">NC-</span></div>
-      <form class="searchbox" id="searchForm" autocomplete="off">
-        <span class="sn">SN</span>
-        <input id="q" name="q" inputmode="text" spellcheck="false" autocapitalize="characters" autocomplete="off" enterkeyhint="search" placeholder="000000" aria-label="Serial number">
-        <button type="submit" id="goBtn">Retrieve</button>
-      </form>
+        <div class="console">
+          <div class="clabel"><span>Enter serial number</span><span id="clabelReady">NC-</span></div>
+          <form class="searchbox" id="searchForm" autocomplete="off">
+            <span class="sn">SN</span>
+            <input id="q" name="q" inputmode="text" spellcheck="false" autocapitalize="characters" autocomplete="off" enterkeyhint="search" placeholder="000000" aria-label="Serial number">
+            <button type="submit" id="goBtn">Retrieve</button>
+          </form>
+        </div>
+        <div class="hint">Enter the full serial from the label. Dashes, spaces and case are ignored.</div>
+        <noscript><div class="noscript-note">The serial lookup runs on JavaScript, which is off in this browser. Turn it on to search, or email <a href="mailto:support@northcomm.app">support@northcomm.app</a> with the serial and Northcomm will send the report directly.</div></noscript>
+        <div class="result hidden" id="result" aria-live="polite"></div>
+      </div>
+
+      <div>
+        <button type="button" class="sheetbtn" id="sheetSample" aria-label="Run the lookup for the sample serial NC-121484">
+          <div class="sheet-frame">
+            <img src="report-sample.webp" srcset="report-sample-sm.webp 455w, report-sample.webp 910w" sizes="(min-width: 920px) 50vw, 100vw" width="910" height="1127" decoding="async" fetchpriority="high" alt="Page 1 of the sweep test report for serial NC-121484: VSWR, insertion loss and time-domain traces">
+          </div>
+          <div class="sheet-cap"><span><b>NC-121484</b>, page 1 of the report on file</span><span>View sample &darr;</span></div>
+        </button>
+      </div>
     </div>
-    <div class="hint">Enter the full serial from the label. Dashes, spaces and case are ignored.</div>
-    <div class="result hidden" id="result" aria-live="polite"></div>
   </div>
 </section>
 
 <section class="block" id="faq">
   <div class="wrap">
-    <div class="idx"><b>02</b> / Notes</div>
-    <div class="faq">
-      <details class="q"><summary>Where is the serial number?</summary><div class="a">Printed on the label attached to the cable assembly, starting with "NC" and a number. Some labels also carry a QR code that opens the report directly.</div></details>
-      <details class="q"><summary>The serial isn't found.</summary><div class="a">Check the digits against the label. If it still isn't here, the report may not be published yet. Reach out and Northcomm will confirm the assembly and upload it.</div></details>
-      <details class="q"><summary>What's in a report?</summary><div class="a">The factory sweep test for that exact assembly: VSWR and insertion loss across the swept range, the pass or fail result, and the test date. The PDF is the document that shipped with the cable.</div></details>
-      <details class="q"><summary>Do I need an account?</summary><div class="a">No. Anyone with a serial can pull its published report here. No sign-in.</div></details>
+    <div class="band">
+      <div class="col-notes">
+        <h3>Notes</h3>
+        <div class="faq">
+          <details class="q"><summary>Where is the serial number?</summary><div class="a">Printed on the label attached to the cable assembly, starting with "NC" and a number. Some labels also carry a QR code that opens the report directly.</div></details>
+          <details class="q"><summary>The serial isn't found.</summary><div class="a">Check the digits against the label. If it still isn't here, the report may not be published yet. Reach out and Northcomm will confirm the assembly and upload it.</div></details>
+          <details class="q"><summary>What's in a report?</summary><div class="a">The factory sweep test for that exact assembly: VSWR and insertion loss across the swept range, the pass or fail result, and the test date. The PDF is the document that shipped with the cable.</div></details>
+          <details class="q"><summary>Do I need an account?</summary><div class="a">No. Anyone with a serial can pull its published report here. No sign-in.</div></details>
+        </div>
+      </div>
+      <div class="col-request">
+        <div class="req-sheet">
+          <div class="cta">A serial with no report on file?</div>
+          <p class="sub">Send it over. Northcomm will locate the assembly and publish its test report.</p>
+          <a class="btn btn-primary contact" href="#" id="contactBtn">Request a report</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <div class="idx"><b>03</b> / Missing report</div>
-    <div style="margin-top:16px" class="cta">A serial with no report on file?</div>
-    <p class="sub">Send it over. Northcomm will locate the assembly and publish its test report.</p>
-    <a class="btn btn-primary contact" href="#" id="contactBtn">Request a report</a>
     <div class="fine">
       <span>Northcomm Technologies</span>
       <span>RF cable assembly test records</span>
       <span class="push"></span>
-      <a href="privacy.html">Privacy</a>
-      <a href="support.html">Support</a>
+      <span class="links">
+        <a href="privacy.html">Privacy</a>
+        <a href="support.html">Support</a>
+      </span>
     </div>
   </div>
 </footer>
@@ -261,19 +306,19 @@
 
   function renderFound(row, typed){
     var res = (row.result||"").toUpperCase();
-    var badgeClass = res==="PASS"?"pass":(res==="FAIL"?"fail":"na");
-    var badgeTxt = res || "On file";
+    var chipClass = res==="PASS"?"pass":(res==="FAIL"?"fail":"na");
+    var chipTxt = res || "On file";
     var href = pdfHref(row.pdf_url);
     var html =
       "<div class='card'>"+
         "<div class='head'>"+
           "<div class='meta'><div class='ser'>"+esc(row.serial)+"</div><h2>"+esc(row.title||"Test Report")+"</h2></div>"+
-          "<span class='badge "+badgeClass+"'>"+esc(badgeTxt)+"</span>"+
+          "<span class='chip "+chipClass+"'>"+esc(chipTxt)+"</span>"+
         "</div>"+
         specRows(row.specs)+
         (href?"<div class='viewer'><div class='vhead'><span>Full sweep report</span><span class='vhint'>Loads below. Large scan, give it a moment.</span></div><div class='pdfwrap'><div class='pdfloading' id='pdfLoading'><span class='spin'></span> Loading report&hellip;</div><iframe class='pdfview' src='"+esc(href)+"#view=FitH&toolbar=1' title='Full test report for "+esc(row.serial)+"' loading='eager'></iframe></div></div>":"")+
         "<div class='foot'>"+
-          (href?"<a class='btn btn-primary' href='"+esc(href)+"' target='_blank' rel='noopener noreferrer' id='openBtn'>Open full screen</a>":"<span style='color:var(--sub);font-family:var(--mono);font-size:12.5px'>Specs on file. Full PDF not uploaded yet.</span>")+
+          (href?"<a class='btn btn-primary' href='"+esc(href)+"' target='_blank' rel='noopener noreferrer' id='openBtn'>Open full report</a>":"<span style='color:var(--steel);font-family:var(--mono);font-size:12.5px'>Specs on file. Full PDF not uploaded yet.</span>")+
           "<button class='btn btn-ghost' id='againBtn'>New lookup</button>"+
         "</div>"+
       "</div>";
@@ -304,7 +349,7 @@
 
   function renderNotFound(typed){
     show("<div class='notice'><div class='big'>No report on file for &ldquo;"+esc(typed)+"&rdquo;</div>"+
-      "Check the serial against the label and try again. If it still isn't here, the report may not be published yet. <a href='#' id='nf-contact' style='color:var(--signal-ink);font-weight:600'>Let Northcomm know</a> and they'll upload it."+
+      "Check the serial against the label and try again. If it still isn't here, the report may not be published yet. <a href='#' id='nf-contact' style='color:var(--signal-text);font-weight:600'>Let Northcomm know</a> and they'll upload it."+
       "<div style='margin-top:18px'><button class='btn btn-ghost' id='againBtn'>Try again</button></div></div>");
     var again=$("againBtn"); if(again) again.onclick=reset;
     var c=$("nf-contact"); if(c) c.onclick=function(e){e.preventDefault();contact();};
@@ -332,6 +377,7 @@
   // ---- wire up ----
   $("searchForm").addEventListener("submit",function(e){ e.preventDefault(); run($("q").value); });
   $("contactBtn").addEventListener("click",function(e){ e.preventDefault(); contact(); });
+  $("sheetSample").addEventListener("click",function(){ $("q").value="NC-121484"; run("NC-121484"); });
 
   (function deep(){
     var m=/[#?]s=([^&]+)/.exec(location.href);
