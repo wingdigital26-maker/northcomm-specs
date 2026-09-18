@@ -47,11 +47,13 @@
   .topbar .spacer{flex:1}
   @media (max-width:600px){.brand .tagline{display:none}}
 
-  /* hero: fills first viewport on desktop */
-  .hero{position:relative;border-bottom:1px solid var(--line-strong)}
-  .hero .grid{display:grid;grid-template-columns:1fr;gap:44px;align-items:center;min-height:calc(100svh - 59px);padding:clamp(40px,6vw,72px) 0}
+  /* hero: fills first viewport on desktop, faint blueprint grid fading down */
+  .hero{position:relative;border-bottom:1px solid var(--line-strong);overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(#eceae3 1px,transparent 1px),linear-gradient(90deg,#eceae3 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(180deg,#000 0%,transparent 72%);-webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 72%);opacity:.8;pointer-events:none}
+  .hero .wrap{position:relative}
+  .hero .grid{display:grid;grid-template-columns:1fr;gap:36px;align-items:center;min-height:calc(100svh - 58px);padding:clamp(32px,5vw,96px) 0}
   @media (min-width:920px){
-    .hero .grid{grid-template-columns:1fr 1fr;gap:64px}
+    .hero .grid{grid-template-columns:1fr minmax(480px,600px);gap:56px}
   }
 
   .hero h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,5.4vw,58px);line-height:.98;letter-spacing:-.015em;color:var(--ink);max-width:15ch}
@@ -73,7 +75,7 @@
   .hint{font-family:var(--mono);font-size:12px;color:var(--steel);margin:14px 2px 0}
   .hint b{color:var(--ink);font-weight:600}
 
-  .result{margin:22px 0 0;max-width:660px}
+  .result{margin:22px 0 0;max-width:660px;scroll-margin-top:74px}
   .result:empty{margin:0}
 
   /* the report sheet: a real report page, cropped + faded, as a button */
@@ -89,6 +91,12 @@
   }
   @media (prefers-reduced-motion: reduce){
     .sheetbtn:hover .sheet-frame img{transform:none}
+  }
+  /* while a result is showing, the hero sample sheet is redundant on
+     narrow screens (the result card already carries the report) -- hide
+     it there, restore it when a new lookup clears the result */
+  @media (max-width:919px){
+    body.has-result .hero-sample{display:none}
   }
 
   /* result card: same sheet system */
@@ -107,12 +115,12 @@
   table.specs td:first-child{font-family:var(--mono);font-size:12px;color:var(--steel);width:56%;letter-spacing:.02em}
   table.specs td:last-child{text-align:right;font-family:var(--mono);color:var(--ink);font-weight:600}
   .card .foot{padding:16px 20px;display:flex;gap:10px;flex-wrap:wrap;border-top:1px solid var(--line);background:var(--paper)}
-  .card .viewer{border-top:1px solid var(--line);background:#efece6}
+  .card .viewer{border-top:1px solid var(--line);background:var(--sheet)}
   .card .vhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 20px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--steel)}
   .card .vhead .vhint{letter-spacing:.02em;text-transform:none;color:var(--steel)}
   .card .pdfwrap{position:relative}
-  .card .pdfview{display:block;width:100%;height:clamp(440px,74vh,900px);border:0;background:#efece6}
-  .card .pdfloading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--steel);background:#efece6;pointer-events:none}
+  .card .pdfview{display:block;width:100%;height:min(70vh,900px);border:0;background:var(--sheet)}
+  .card .pdfloading{position:absolute;inset:10px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--steel);background:var(--sheet);border:1px solid var(--line);pointer-events:none}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;font-family:var(--cond);font-size:14px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;padding:13px 20px;cursor:pointer;text-decoration:none;transition:background .15s,border-color .15s}
   .btn-primary{background:var(--signal-btn);color:#fff}
   .btn-primary:hover{background:#b32b00}
@@ -208,12 +216,12 @@
         <div class="result hidden" id="result" aria-live="polite"></div>
       </div>
 
-      <div>
+      <div class="hero-sample" id="heroSample">
         <button type="button" class="sheetbtn" id="sheetSample" aria-label="Run the lookup for the sample serial NC-121484">
           <div class="sheet-frame">
-            <img src="report-sample.webp" srcset="report-sample-sm.webp 455w, report-sample.webp 910w" sizes="(min-width: 920px) 50vw, 100vw" width="910" height="1127" decoding="async" fetchpriority="high" alt="Page 1 of the sweep test report for serial NC-121484: VSWR, insertion loss and time-domain traces">
+            <img src="report-sample.webp" srcset="report-sample-sm.webp 455w, report-sample.webp 910w" sizes="(min-width: 920px) 600px, 100vw" width="910" height="1127" decoding="async" fetchpriority="high" alt="Page 1 of the sweep test report for serial NC-121484: VSWR, insertion loss and time-domain traces">
           </div>
-          <div class="sheet-cap"><span><b>NC-121484</b>, page 1 of the report on file</span><span>View sample &darr;</span></div>
+          <div class="sheet-cap"><span><b>NC-121484</b>, page 1 of the report on file</span><span>Run this lookup</span></div>
         </button>
       </div>
     </div>
@@ -309,6 +317,11 @@
     var chipClass = res==="PASS"?"pass":(res==="FAIL"?"fail":"na");
     var chipTxt = res || "On file";
     var href = pdfHref(row.pdf_url);
+    // Small viewports (phones) never get the inline PDF embed: the scans are
+    // large (multi-MB) and iOS Safari does not render PDFs in an iframe at
+    // all, so it would only ever show an empty loading slab. Below 761px,
+    // show the summary + buttons only; "Open full report" still works there.
+    var embedOk = href && window.innerWidth > 760;
     var html =
       "<div class='card'>"+
         "<div class='head'>"+
@@ -316,7 +329,8 @@
           "<span class='chip "+chipClass+"'>"+esc(chipTxt)+"</span>"+
         "</div>"+
         specRows(row.specs)+
-        (href?"<div class='viewer'><div class='vhead'><span>Full sweep report</span><span class='vhint'>Loads below. Large scan, give it a moment.</span></div><div class='pdfwrap'><div class='pdfloading' id='pdfLoading'><span class='spin'></span> Loading report&hellip;</div><iframe class='pdfview' src='"+esc(href)+"#view=FitH&toolbar=1' title='Full test report for "+esc(row.serial)+"' loading='eager'></iframe></div></div>":"")+
+        (embedOk?"<div class='viewer'><div class='vhead'><span>Full sweep report</span><span class='vhint'>Loads below. Large scan, give it a moment.</span></div><div class='pdfwrap'><div class='pdfloading' id='pdfLoading'><span class='spin'></span> Loading report&hellip;</div><iframe class='pdfview' src='"+esc(href)+"#view=FitH&toolbar=1' title='Full test report for "+esc(row.serial)+"' loading='eager'></iframe></div></div>":"")+
+        (href&&!embedOk?"<div class='viewer'><div class='vhead'><span>Full sweep report</span><span class='vhint'>Large scan. Opens in a new tab.</span></div></div>":"")+
         "<div class='foot'>"+
           (href?"<a class='btn btn-primary' href='"+esc(href)+"' target='_blank' rel='noopener noreferrer' id='openBtn'>Open full report</a>":"<span style='color:var(--steel);font-family:var(--mono);font-size:12.5px'>Specs on file. Full PDF not uploaded yet.</span>")+
           "<button class='btn btn-ghost' id='againBtn'>New lookup</button>"+
@@ -355,8 +369,8 @@
     var c=$("nf-contact"); if(c) c.onclick=function(e){e.preventDefault();contact();};
   }
 
-  function show(html){ var r=$("result"); r.innerHTML=html; r.classList.remove("hidden"); r.scrollIntoView({behavior:"smooth",block:"nearest"}); }
-  function reset(){ var r=$("result"); r.classList.add("hidden"); r.innerHTML=""; var q=$("q"); q.value=""; q.focus(); }
+  function show(html){ var r=$("result"); r.innerHTML=html; r.classList.remove("hidden"); document.body.classList.add("has-result"); r.scrollIntoView({behavior:"smooth",block:"nearest"}); }
+  function reset(){ var r=$("result"); r.classList.add("hidden"); r.innerHTML=""; document.body.classList.remove("has-result"); var q=$("q"); q.value=""; q.focus(); }
 
   async function run(typed){
     typed=(typed||"").trim();
