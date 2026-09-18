@@ -6,23 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#353535">
-<link rel="icon" type="image/png" sizes="192x192" id="favicon">
+<link rel="icon" type="image/png" sizes="192x192" href="/northcomm-specs/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@700&display=swap" rel="stylesheet">
 <style>
-  /* the real @font-face src urls are base-prefixed and injected by the
-     base-detection script below, since this page can be served from any
-     depth (see that script's comment) and a relative url() here would
-     resolve against the browser's original (nonexistent) URL, not this
-     file's real location. The fallback face below is location-independent
-     (local() only) so text still renders with matched metrics if that
-     script doesn't run for any reason. */
-  @font-face{font-family:"IBM Plex Sans Fallback";src:local("Arial");size-adjust:104%;ascent-override:93%;descent-override:23%;line-gap-override:0%}
-  @font-face{font-family:"IBM Plex Mono Fallback";src:local("Arial");size-adjust:92%;ascent-override:93%;descent-override:23%;line-gap-override:0%}
   :root{
-    --ink:#1f1e1c;--steel:#5f5e5a;--signal-text:#c72c00;
-    --paper:#fbfaf7;--sheet:#ffffff;--line:#d9d6cf;--line-strong:#c4c1b8;
-    --sans:"IBM Plex Sans","IBM Plex Sans Fallback",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    --cond:"IBM Plex Sans Condensed","IBM Plex Sans Fallback",system-ui,sans-serif;
-    --mono:"IBM Plex Mono","IBM Plex Mono Fallback",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --ink:#20211f;--sub:#5c5f5a;--signal:#FF3800;--signal-ink:#c72c00;
+    --paper:#fbfaf7;--line:#dcdad4;--line-strong:#c4c1b8;
+    --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
+    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
     color-scheme:light;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -30,73 +24,48 @@
   img{max-width:100%}
 
   /* top bar (matches index/privacy/support) */
-  .topbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line-strong)}
+  .topbar{position:sticky;top:0;z-index:20;background:rgba(251,250,247,.92);backdrop-filter:saturate(1.1) blur(6px);border-bottom:1px solid var(--line-strong)}
   .topbar .bar{max-width:1080px;margin:0 auto;padding:0 clamp(18px,4vw,40px);display:flex;align-items:center;gap:14px;height:58px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
   .brand .logo{height:24px;width:auto;display:block}
-  .brand .tagline{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--steel);padding-left:12px;border-left:1px solid var(--line-strong)}
+  .brand .tagline{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--sub);padding-left:12px;border-left:1px solid var(--line-strong)}
   .topbar .spacer{flex:1}
-  .toplink{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--steel);text-decoration:none;padding:8px 4px}
+  .toplink{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--sub);text-decoration:none;padding:8px 4px}
   .toplink:hover{color:var(--ink)}
   @media (max-width:600px){.brand .tagline{display:none}}
 
   .wrap{max-width:680px;margin:0 auto;padding:min(18vh,140px) 22px 60px}
+  .idx{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.05em;color:var(--sub);text-transform:uppercase;display:flex;align-items:center;gap:9px;margin-bottom:18px}
+  .idx b{color:var(--signal-ink);font-weight:600}
   h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,7vw,56px);letter-spacing:-.015em;line-height:1;margin-bottom:14px}
-  p.lede{color:var(--steel);font-size:15.5px;max-width:46ch;line-height:1.6;margin-bottom:30px}
-  .back{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;font-family:var(--cond);font-size:14px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;padding:13px 20px;cursor:pointer;text-decoration:none;background:var(--signal-text);color:#fff;transition:background .15s}
-  .back:hover{background:#a02400}
-  .noscript-note{max-width:680px;margin:0 auto 30px;background:var(--sheet);border:1px solid var(--line-strong);padding:16px 18px;font-size:13.5px;color:var(--steel)}
+  p.lede{color:var(--sub);font-size:15.5px;max-width:46ch;line-height:1.6;margin-bottom:30px}
+  .back{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;font-family:var(--cond);font-size:14px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;padding:13px 20px;cursor:pointer;text-decoration:none;background:var(--ink);color:#fff;transition:background .15s}
+  .back:hover{background:#000}
 
-  footer .fine{max-width:680px;margin:0 auto;padding:20px 22px 40px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--steel);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
-  footer .fine a{text-decoration:none;color:var(--steel)}
+  footer .fine{max-width:680px;margin:0 auto;padding:20px 22px 40px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--sub);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
+  footer .fine a{text-decoration:none;color:var(--sub)}
   footer .fine a:hover{color:var(--ink)}
   footer .fine .push{margin-left:auto}
 </style>
-<script>
-  // 404.html can be served from any depth (a subpath project page or a
-  // future custom-domain root). Derive every link's base at runtime from
-  // the current path instead of hardcoding "/northcomm-specs/": if the
-  // first path segment is "northcomm-specs" we're on the subpath, else
-  // we're at a domain root.
-  (function(){
-    var seg = location.pathname.split("/").filter(Boolean)[0];
-    var base = (seg === "northcomm-specs") ? "/northcomm-specs/" : "/";
-    window.__BASE__ = base;
-    var f = base + "fonts/";
-    var css =
-      '@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:400;font-display:swap;src:url("'+f+'ibm-plex-sans-400.woff2") format("woff2")}'+
-      '@font-face{font-family:"IBM Plex Sans";font-style:normal;font-weight:500;font-display:swap;src:url("'+f+'ibm-plex-sans-500.woff2") format("woff2")}'+
-      '@font-face{font-family:"IBM Plex Sans Condensed";font-style:normal;font-weight:700;font-display:swap;src:url("'+f+'ibm-plex-sans-condensed-700.woff2") format("woff2")}'+
-      '@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:400;font-display:swap;src:url("'+f+'ibm-plex-mono-400.woff2") format("woff2")}'+
-      '@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:500;font-display:swap;src:url("'+f+'ibm-plex-mono-500.woff2") format("woff2")}'+
-      '@font-face{font-family:"IBM Plex Mono";font-style:normal;font-weight:600;font-display:swap;src:url("'+f+'ibm-plex-mono-600.woff2") format("woff2")}';
-    var s = document.createElement("style"); s.textContent = css;
-    document.head.insertBefore(s, document.head.firstChild);
-    var pre1=document.createElement("link"); pre1.rel="preload"; pre1.as="font"; pre1.type="font/woff2"; pre1.crossOrigin="anonymous"; pre1.href=f+"ibm-plex-sans-condensed-700.woff2";
-    var pre2=document.createElement("link"); pre2.rel="preload"; pre2.as="font"; pre2.type="font/woff2"; pre2.crossOrigin="anonymous"; pre2.href=f+"ibm-plex-mono-600.woff2";
-    document.head.appendChild(pre1); document.head.appendChild(pre2);
-  })();
-</script>
 </head>
 <body>
 
 <header class="topbar">
   <div class="bar">
-    <a class="brand" href="#" data-base-link="">
-      <img class="logo" data-base-src="northcomm-logo.png" alt="Northcomm Technologies" width="600" height="126">
+    <a class="brand" href="/northcomm-specs/">
+      <img class="logo" src="/northcomm-specs/northcomm-logo.png" alt="Northcomm Technologies" width="600" height="126">
       <span class="tagline">Spec Lookup</span>
     </a>
     <span class="spacer"></span>
-    <a class="toplink" href="#" data-base-link="">Spec Lookup</a>
+    <a class="toplink" href="/northcomm-specs/">Spec Lookup</a>
   </div>
 </header>
 
-<noscript><div class="noscript-note" style="margin-top:min(18vh,140px)">The link may be old or mistyped. Go to <a href="/northcomm-specs/">/northcomm-specs/</a> (or the site root) for the spec lookup tool.</div></noscript>
-
 <div class="wrap">
+  <div class="idx"><b>404</b> / Not found</div>
   <h1>That page doesn't exist.</h1>
   <p class="lede">The link may be old or mistyped. The spec lookup tool is still at the address below if you have a serial to look up.</p>
-  <a class="back" href="#" data-base-link="">Go to Spec Lookup</a>
+  <a class="back" href="/northcomm-specs/">&larr; Go to Spec Lookup</a>
 </div>
 
 <footer>
@@ -104,22 +73,9 @@
     <span>Northcomm Technologies</span>
     <span>RF cable assembly test records</span>
     <span class="push"></span>
-    <a href="#" data-base-link="privacy.html">Privacy</a>
-    <a href="#" data-base-link="support.html">Support</a>
+    <a href="/northcomm-specs/privacy.html">Privacy</a>
+    <a href="/northcomm-specs/support.html">Support</a>
   </div>
 </footer>
-<script>
-  (function(){
-    var base = window.__BASE__ || "/";
-    document.querySelectorAll("[data-base-link]").forEach(function(el){
-      el.setAttribute("href", base + el.getAttribute("data-base-link"));
-    });
-    document.querySelectorAll("[data-base-src]").forEach(function(el){
-      el.setAttribute("src", base + el.getAttribute("data-base-src"));
-    });
-    var fav = document.getElementById("favicon");
-    if(fav) fav.setAttribute("href", base + "icon-192.png");
-  })();
-</script>
 </body>
 </html>
