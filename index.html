@@ -6,7 +6,7 @@
 <title>Northcomm Spec Lookup: RF Cable Test Reports</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
-<meta name="description" content="Look up the factory test report and RF sweep specs for any Northcomm cable assembly. Enter the serial number printed on the label to open the report on file.">
+<meta name="description" content="Look up the factory sweep test report for a serialized Northcomm cable assembly. Enter the serial number printed on the label to open the report on file.">
 <link rel="canonical" href="https://northcommtechspecs.com/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Northcomm Spec Lookup: RF Cable Test Reports">
@@ -250,6 +250,15 @@
   body.has-result .result{max-width:none}
   body.has-result .result .pill{justify-self:start}
   body.has-result .lookup{margin-top:0}
+
+  /* hero without the side preview: one centred column */
+  @media (min-width:980px){ .heroGrid{grid-template-columns:minmax(0,680px);justify-content:center} }
+  .hero .heroGrid > div:first-child{margin:0 auto;width:100%;max-width:680px;text-align:center}
+  .hero .lookup{margin-left:auto;margin-right:auto;max-width:600px;text-align:left}
+  .hero .trust{justify-content:center}
+  body.has-result .hero .heroGrid > div:first-child{max-width:none;text-align:left}
+  body.has-result .heroGrid{grid-template-columns:minmax(0,1fr)}
+  body.has-result .hero .lookup{margin-left:0}
 </style>
 </head>
 <body>
@@ -270,8 +279,8 @@
   <div class="wrap">
     <div class="heroGrid">
       <div>
-        <h1>Find the test report for <em>any cable we shipped.</em></h1>
-        <p class="lede">Every Northcomm RF cable assembly ships with its own serialized sweep report. Type the serial from the label and open it below.</p>
+        <h1>Find the test report for <em>your Northcomm cable.</em></h1>
+        <p class="lede">If your Northcomm cable has a serial number on its label, type it here to open its sweep test report. Reports are on file for our newer serialized assemblies, not every cable we have ever made.</p>
 
         <div class="lookup">
           <label for="q">Serial number</label>
@@ -295,33 +304,6 @@
         </div>
       </div>
 
-      <div class="previewWrap">
-        <button type="button" class="preview" id="sampleBtn" aria-label="Preview of a report, click to fill the input with sample serial NC-121484 and run the lookup">
-          <div class="pTop">
-            <span class="pEyebrow">Test report</span>
-            <span class="pSample">Try a sample</span>
-          </div>
-          <div class="pTitle">RF Cable Assembly Test Report</div>
-          <div class="pSerial">NC-121484</div>
-          <div class="pPass">
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l5 5L20 6"/></svg>
-            PASS
-          </div>
-          <div class="pOpenBtn">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12m0 0l-4-4m4 4l4-4M4 19h16"/></svg>
-            Open full report
-          </div>
-          <div class="pFile">
-            <span class="pFileIcon">PDF</span>
-            <span class="pFileText"><b>NC-121484.pdf</b><span>Factory sweep report</span></span>
-          </div>
-          <div class="pSummary">
-            <span class="pEyebrow">Summary</span>
-            <p>Factory test report on file for serial NC-121484.</p>
-          </div>
-          <div class="pHint">This is a preview. Click it to run this exact lookup.</div>
-        </button>
-      </div>
     </div>
   </div>
 </section>
@@ -362,7 +344,7 @@
         <div class="stripStep">
           <div class="snum">Step 3</div>
           <h4>Open the PDF</h4>
-          <p>The report opens, the same document that shipped in the box.</p>
+          <p>The report opens as the original PDF from the test bench.</p>
           <div class="art">
             <svg viewBox="0 0 180 110" width="130" height="104" fill="none" xmlns="http://www.w3.org/2000/svg">
               <rect x="42" y="12" width="76" height="94" rx="8" fill="#ffffff" stroke="#c9c8c2" stroke-width="2"/>
@@ -413,17 +395,9 @@
     <h3>A few things people ask.</h3>
     <div class="faq">
       <details class="q"><summary>Where is the serial number?<span class="plus">+</span></summary><div class="a">Printed on the label attached to the cable assembly, starting with "NC" and a number. Some labels also carry a QR code that opens the report directly.</div></details>
-      <details class="q"><summary>The serial isn't found.<span class="plus">+</span></summary><div class="a">Check the digits against the label. If it still isn't here, the report may not be published yet. Reach out and Northcomm will confirm the assembly and upload it.</div></details>
+      <details class="q"><summary>The serial isn't found.<span class="plus">+</span></summary><div class="a">Check the digits against the label. If it still isn't here, there may be no report on file for it. Older assemblies and cables without a serial label were not part of this program. The Support page has the contact details if you need help.</div></details>
       <details class="q"><summary>What's in a report?<span class="plus">+</span></summary><div class="a">The factory sweep test for that exact assembly: VSWR and insertion loss across the swept range, the pass or fail result, and the test date. The PDF is the document that shipped with the cable.</div></details>
       <details class="q"><summary>Do I need an account?<span class="plus">+</span></summary><div class="a">No. Anyone with a serial can pull its published report here. No sign-in.</div></details>
-    </div>
-
-    <div class="missing">
-      <div>
-        <div class="mTitle">A serial with no report on file?</div>
-        <p>Send it over. Northcomm will locate the assembly and publish its test report.</p>
-      </div>
-      <a class="btn btn-primary" href="#" id="contactBtn">Request a report</a>
     </div>
   </div>
 </section>
@@ -597,7 +571,7 @@
 
   // ---- wire up ----
   $("searchForm").addEventListener("submit",function(e){ e.preventDefault(); run($("q").value); });
-  $("contactBtn").addEventListener("click",function(e){ e.preventDefault(); contact(); });
+  var contactBtn=$("contactBtn"); if(contactBtn) contactBtn.addEventListener("click",function(e){ e.preventDefault(); contact(); });
   var sampleBtn=$("sampleBtn");
   if(sampleBtn){
     sampleBtn.addEventListener("click",function(){
