@@ -19,9 +19,14 @@
 <meta name="twitter:image" content="https://northcommtechspecs.com/icon-192.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
+<link rel="preconnect" href="https://ocassdfsueyxwkpvspym.supabase.co" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/inter-700.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter-600.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/inter-500.woff2" crossorigin>
 <link rel="preload" as="font" type="font/woff2" href="fonts/inter-400.woff2" crossorigin>
 <style>
+  /* metric-matched fallback so text does not jump when Inter arrives */
+  @font-face{font-family:"Inter Fallback";src:local("Arial");ascent-override:90.49%;descent-override:22.56%;line-gap-override:0%;size-adjust:107.06%}
   @font-face{font-family:"Inter";src:url("fonts/inter-400.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
   @font-face{font-family:"Inter";src:url("fonts/inter-500.woff2") format("woff2");font-weight:500;font-style:normal;font-display:swap}
   @font-face{font-family:"Inter";src:url("fonts/inter-600.woff2") format("woff2");font-weight:600;font-style:normal;font-display:swap}
@@ -33,7 +38,7 @@
     --paper:#ffffff; --card:#f4f4f4; --card-soft:#f8f8f7; --line:#e4e2df;
     --pass:#1c7a41; --pass-bg:#e9f6ee; --fail:#b3261e; --fail-bg:#fbebea;
     --r-lg:16px; --r-md:14px; --r-sm:12px; --r-pill:999px;
-    --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --sans:"Inter","Inter Fallback",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
     color-scheme:light;
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -49,7 +54,7 @@
   .topbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.92);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
   .topbar .wrap{display:flex;align-items:center;gap:14px;height:68px}
   .brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-height:44px}
-  .brand .logo{height:26px;width:auto;display:block}
+  .brand .logo{height:26px;width:124px;aspect-ratio:600/126;display:block}
   .brand .tagline{font-size:13px;font-weight:500;color:var(--sub);padding-left:12px;border-left:1px solid var(--line)}
   .topbar .spacer{flex:1}
   .toplink{font-size:14.5px;font-weight:500;color:var(--sub);text-decoration:none;padding:8px 4px;min-height:44px;display:inline-flex;align-items:center;border-radius:var(--r-sm)}
@@ -271,6 +276,10 @@
   .viewer:fullscreen .pdfwrap{flex:1;height:auto !important}
   .viewer:fullscreen .pdfwrap iframe{height:100% !important}
   body.fs-lock{overflow:hidden}
+  /* reserve the result area the moment a lookup starts, so nothing jumps when the report arrives */
+  body.has-result .result{min-height:420px}
+  @media (min-width:980px){ body.has-result .result{min-height:calc(min(70vh,860px) + 60px)} }
+  .reportExplain img{aspect-ratio:910/1127;height:auto}
 </style>
 </head>
 <body>
@@ -278,7 +287,7 @@
 <header class="topbar">
   <div class="wrap">
     <a class="brand" href="#top">
-      <img class="logo" src="northcomm-logo.png" alt="Northcomm Technologies" width="600" height="126" fetchpriority="high">
+      <picture><source srcset="northcomm-logo.webp" type="image/webp"><img class="logo" src="northcomm-logo.png" alt="Northcomm Technologies" width="248" height="52" fetchpriority="high" decoding="async"></picture>
       <span class="tagline">Spec Lookup</span>
     </a>
     <span class="spacer"></span>
@@ -381,7 +390,7 @@
   <div class="wrap">
     <div class="reportExplain">
       <div class="sampleImg">
-        <img src="report-sample.webp" width="910" height="1127" loading="lazy" alt="Sample page from a genuine Northcomm RF sweep test report, serial NC-121484.">
+        <img src="report-sample-680.webp" srcset="report-sample-680.webp 680w, report-sample.webp 910w" sizes="(min-width:980px) 340px, 90vw" width="910" height="1127" loading="lazy" decoding="async" alt="Sample page from a genuine Northcomm RF sweep test report, serial NC-121484.">
         <div class="cap">Page 1 of a real sweep report</div>
       </div>
       <div>
@@ -562,7 +571,7 @@
     var c=$("nf-contact"); if(c) c.onclick=function(e){e.preventDefault();contact();};
   }
 
-  function show(html){ var r=$("result"); r.innerHTML=html; r.classList.remove("hidden"); document.body.classList.toggle("has-result", html.indexOf("class='card'")>-1); window.scrollTo({top:0,behavior:(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)?"auto":"smooth"}); }
+  function show(html){ var r=$("result"); r.innerHTML=html; r.classList.remove("hidden"); document.body.classList.add("has-result"); window.scrollTo({top:0,behavior:(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)?"auto":"smooth"}); }
   function reset(){ var r=$("result"); r.classList.add("hidden"); r.innerHTML=""; document.body.classList.remove("has-result"); var q=$("q"); q.value=""; q.focus(); }
 
   async function run(typed){
