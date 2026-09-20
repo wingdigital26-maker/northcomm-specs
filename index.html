@@ -259,6 +259,18 @@
   body.has-result .hero .heroGrid > div:first-child{max-width:none;text-align:left}
   body.has-result .heroGrid{grid-template-columns:minmax(0,1fr)}
   body.has-result .hero .lookup{margin-left:0}
+
+  /* PDF viewer: full screen */
+  .viewer .vhead{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .fsbtn{display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:#fff;color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+  .fsbtn:hover{background:var(--card)}
+  .viewer.isfull{position:fixed;inset:0;z-index:1000;margin:0;border-radius:0;display:flex;flex-direction:column;background:#ececeb}
+  .viewer.isfull .pdfwrap{flex:1;height:auto !important}
+  .viewer.isfull .pdfwrap iframe{height:100% !important}
+  .viewer:fullscreen{display:flex;flex-direction:column;background:#ececeb;border-radius:0}
+  .viewer:fullscreen .pdfwrap{flex:1;height:auto !important}
+  .viewer:fullscreen .pdfwrap iframe{height:100% !important}
+  body.fs-lock{overflow:hidden}
 </style>
 </head>
 <body>
@@ -502,7 +514,7 @@
     var mobile = isMobileViewport();
     var dser = displaySerial(row.serial);
     var big = href && !mobile ?
-        "<div class='viewer'><div class='vhead'>Full sweep report, loads below, large scan, give it a moment.</div><div class='pdfwrap'><div class='pdfloading' id='pdfLoading'><span class='spin dark'></span> Loading report&hellip;</div><iframe class='pdfview' src='"+esc(href)+"#view=FitH&toolbar=1' title='Full test report for "+esc(dser)+"' loading='eager'></iframe></div></div>"
+        "<div class='viewer' id='viewer'><div class='vhead'><span>Full sweep report. Large scan, give it a moment.</span><button type='button' class='fsbtn' id='fsBtn' aria-pressed='false'><svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5'/></svg><span id='fsTxt'>Full screen</span></button></div><div class='pdfwrap'><div class='pdfloading' id='pdfLoading'><span class='spin dark'></span> Loading report&hellip;</div><iframe class='pdfview' src='"+esc(href)+"#view=FitH&toolbar=1' title='Full test report for "+esc(dser)+"' loading='eager'></iframe></div></div>"
       : "";
     var html =
       "<div class='card'>"+
@@ -583,6 +595,21 @@
     var m=/[#?]s=([^&]+)/.exec(location.href);
     if(m){ try{ var s=decodeURIComponent(m[1]); $("q").value=s; run(s); }catch(e){} }
   })();
+})();
+
+/* Full screen for the PDF viewer: native Fullscreen API when the browser allows it,
+   otherwise a fixed full-window overlay. Esc or the same button leaves it. */
+(function(){
+  function viewer(){ return document.getElementById("viewer"); }
+  function isOn(){ var v=viewer(); return !!v && (document.fullscreenElement===v || v.classList.contains("isfull")); }
+  function paint(){ var b=document.getElementById("fsBtn"),t=document.getElementById("fsTxt"); if(!b||!t) return; var on=isOn(); b.setAttribute("aria-pressed",on?"true":"false"); t.textContent=on?"Exit full screen":"Full screen"; }
+  function exit(){ var v=viewer(); if(document.fullscreenElement){ document.exitFullscreen(); } if(v){ v.classList.remove("isfull"); } document.body.classList.remove("fs-lock"); paint(); }
+  function enter(){ var v=viewer(); if(!v) return;
+    var fallback=function(){ v.classList.add("isfull"); document.body.classList.add("fs-lock"); paint(); };
+    if(v.requestFullscreen){ v.requestFullscreen().then(paint).catch(fallback); } else { fallback(); } }
+  document.addEventListener("click",function(e){ var b=e.target.closest && e.target.closest("#fsBtn"); if(!b) return; if(isOn()) exit(); else enter(); });
+  document.addEventListener("fullscreenchange",paint);
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape" && isOn() && !document.fullscreenElement) exit(); });
 })();
 </script>
 </body>
