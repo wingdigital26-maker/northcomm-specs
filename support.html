@@ -50,6 +50,10 @@
   footer .fine a{text-decoration:none;color:var(--sub)}
   footer .fine a:hover{color:var(--ink)}
   footer .fine .push{margin-left:auto}
+  .helpcard{display:flex;flex-direction:column;gap:4px}
+  .helpcard .helpline{font-size:14px;color:var(--sub)}
+  .helpcard .phone{display:inline-flex;align-items:center;min-height:44px;font-size:26px;font-weight:600;letter-spacing:.01em;color:var(--ink);text-decoration:none;font-variant-numeric:tabular-nums}
+  .helpcard .phone:hover{text-decoration:underline}
 </style>
 </head>
 <body>
@@ -71,20 +75,17 @@
 
   <p>Northcomm Spec Lookup pulls up the factory test report on file for a Northcomm cable assembly. Type the serial printed on the label and its report opens. No sign-in, no account.</p>
 
-  <div class="card"><strong>Need help?</strong><br>Email <a href="mailto:support@northcomm.app">support@northcomm.app</a></div>
+  <div class="card helpcard"><strong>Need help?</strong><span class="helpline">Call Northcomm support</span><a class="phone" href="tel:+18668581745" aria-label="Call Northcomm support at 1 866 858 1745">1-866-858-1745</a></div>
 
   <h2>Looking up a serial</h2>
   <ol>
     <li>Find the serial on the label attached to the cable assembly. It starts with "NC" and a number, for example NC-121483.</li>
     <li>Type it into the search box on the home page. Dashes, spaces and case are ignored, so 121483 and NC-121483 both work.</li>
-    <li>Choose <strong>Retrieve</strong>. The matching report and its specs appear below.</li>
+    <li>Choose <strong>Retrieve report</strong>. The matching report appears on the page.</li>
   </ol>
 
-  <h2>Browsing every report</h2>
-  <p>The home page lists every report on file under "Published reports." Choose any row to open its specs and full report.</p>
-
   <h2>Nothing comes up for a serial</h2>
-  <p>If the page says no report is on file, check the digits against the label. If it still is not here, the report may not be published yet. Use the request link on the page and Northcomm will locate the assembly and upload it.</p>
+  <p>If the page says no report is on file, check the digits against the label. If it still is not here, there may be no report on file for it. Reports are on file for our newer serialized assemblies, not every cable we have ever made. Call the number above and Northcomm can check for you.</p>
 
   <h2>The report will not open</h2>
   <p>Choose <strong>Open full report</strong> to open the PDF in a new tab. Reports are large documents, so on a slow connection one can take a few seconds to arrive. If your browser blocks the new tab, allow pop-ups for this page and try again.</p>
