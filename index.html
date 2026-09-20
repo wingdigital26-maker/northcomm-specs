@@ -1,7 +1,8 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" class="no-js">
 <head>
 <meta charset="utf-8">
+<script>document.documentElement.className=document.documentElement.className.replace("no-js","js");</script>
 <title>Northcomm Spec Lookup: RF Cable Test Reports</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#353535">
@@ -39,18 +40,18 @@
   .wrap{max-width:1080px;margin:0 auto;padding:0 clamp(18px,4vw,40px)}
 
   /* index label: 01 / LOOKUP */
-  .idx{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.05em;color:var(--sub);text-transform:uppercase;display:flex;align-items:center;gap:9px}
+  .idx{font-family:var(--mono);font-size:12.5px;font-weight:500;letter-spacing:.05em;color:#6b6e68;text-transform:uppercase;display:flex;align-items:center;gap:9px}
   .idx b{color:var(--signal-ink);font-weight:600}
   .idx::after{content:"";flex:1;height:1px;background:var(--line)}
 
   /* top bar */
   .topbar{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:1px solid var(--line-strong)}
   .topbar .wrap{display:flex;align-items:center;gap:14px;height:58px}
-  .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+  .brand{display:flex;align-items:center;gap:12px;text-decoration:none;min-height:44px}
   .brand .logo{height:24px;width:auto;display:block}
   .brand .tagline{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--sub);padding-left:12px;border-left:1px solid var(--line-strong)}
   .topbar .spacer{flex:1}
-  .toplink{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--sub);text-decoration:none;padding:8px 4px}
+  .toplink{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--sub);text-decoration:none;padding:8px 4px;min-height:44px;display:inline-flex;align-items:center}
   .toplink:hover{color:var(--ink)}
   @media (max-width:600px){.brand .tagline{display:none}}
 
@@ -58,10 +59,24 @@
   .hero{position:relative;border-bottom:1px solid var(--line-strong);overflow:hidden}
   .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:34px 34px;mask-image:linear-gradient(180deg,#000 0%,transparent 78%);-webkit-mask-image:linear-gradient(180deg,#000 0%,transparent 78%);opacity:.9;pointer-events:none}
   .hero .wrap{position:relative;padding:clamp(40px,7vw,74px) clamp(18px,4vw,40px) clamp(34px,5vw,54px)}
+  .hero .grid2{display:block}
   .hero .idx{max-width:560px}
   .hero h1{font-family:var(--cond);font-weight:700;font-size:clamp(34px,7vw,64px);line-height:.98;letter-spacing:-.015em;color:var(--ink);margin:20px 0 0;max-width:15ch}
   .hero h1 em{font-style:normal;color:var(--signal)}
   .hero .lede{font-size:clamp(15px,2.2vw,17px);color:var(--sub);margin:18px 0 0;max-width:50ch;line-height:1.55}
+
+  /* hero sample-serial panel (desktop only, tile B); JS-only control, hidden without JS */
+  .sample{display:none}
+  .no-js .sample{display:none!important}
+  @media (min-width:1000px){
+    .hero .grid2{display:grid;grid-template-columns:minmax(0,620px) minmax(240px,1fr);gap:clamp(28px,4vw,56px);align-items:start}
+    .sample{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-align:left;background:transparent;border:1px solid var(--line-strong);padding:clamp(22px,2.4vw,34px) clamp(20px,2.4vw,30px);margin-top:6px;cursor:pointer;font:inherit}
+    .sample .scap{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
+    .sample .sval{font-family:var(--mono);font-weight:600;font-size:clamp(28px,3.2vw,40px);letter-spacing:.01em;color:var(--ink)}
+    .sample .sval .pre{color:#7f7c70}
+    .sample .sval .num{color:var(--signal-ink)}
+    .sample .shint{font-family:var(--mono);font-size:11.5px;color:var(--signal-ink)}
+  }
 
   /* search console */
   .console{margin:30px 0 0;max-width:620px;background:var(--panel);border:1px solid var(--line-strong);box-shadow:0 1px 0 var(--line)}
@@ -78,7 +93,7 @@
   .hint{font-family:var(--mono);font-size:12px;color:var(--sub);margin:14px 2px 0}
   .hint b{color:var(--ink);font-weight:600}
 
-  .result{margin:22px 0 0;max-width:660px}
+  .result{margin:22px 0 0;max-width:660px;scroll-margin-top:74px}
   .result:empty{margin:0}
 
   /* result card: datasheet */
@@ -102,7 +117,7 @@
   .card .vhead{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:11px 20px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sub)}
   .card .vhead .vhint{letter-spacing:.02em;text-transform:none;color:var(--sub)}
   .card .pdfwrap{position:relative}
-  .card .pdfview{display:block;width:100%;height:clamp(440px,74vh,900px);border:0;background:#efece6}
+  .card .pdfview{display:block;width:100%;height:clamp(440px,70vh,900px);border:0;background:#efece6}
   .card .pdfloading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--mono);font-size:12.5px;letter-spacing:.04em;color:var(--sub);background:#efece6;pointer-events:none}
   .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;font-family:var(--cond);font-size:14px;font-weight:700;letter-spacing:.02em;text-transform:uppercase;padding:13px 20px;cursor:pointer;text-decoration:none;transition:background .15s,border-color .15s}
   .btn-primary{background:var(--ink);color:#fff}
@@ -127,15 +142,29 @@
   details.q[open] summary::before{content:"\2013"}
   details.q .a{padding:0 4px 20px 32px;color:var(--sub);font-size:14px;line-height:1.65;max-width:64ch}
 
+  /* notes + missing-report grid */
+  .notesGrid{display:block}
+  .notesCol{max-width:640px}
+  .reportCol{margin-top:44px}
+  .reportCard{border:1px solid var(--line-strong);background:var(--panel);padding:24px clamp(20px,2.4vw,28px) 28px}
+  .reportCard .cta{font-family:var(--cond);font-size:clamp(20px,2.6vw,26px);font-weight:700;color:var(--ink);letter-spacing:-.01em;line-height:1.15}
+  .reportCard p.sub{color:var(--sub);font-size:14px;margin:12px 0 0;max-width:44ch;line-height:1.6}
+  .reportCard .contact{margin-top:20px}
+  @media (min-width:900px){
+    .notesGrid{display:grid;grid-template-columns:minmax(0,640px) minmax(260px,1fr);gap:clamp(28px,4vw,56px);align-items:start}
+    .reportCol{margin-top:0}
+  }
+
   /* footer */
-  footer{padding:clamp(44px,6vw,64px) 0 40px}
-  footer .cta{font-family:var(--cond);font-size:clamp(22px,3.4vw,32px);font-weight:700;color:var(--ink);letter-spacing:-.01em;max-width:18ch}
-  footer p.sub{color:var(--sub);font-size:14.5px;margin:14px 0 0;max-width:46ch;line-height:1.6}
-  footer .contact{margin-top:22px}
-  footer .fine{margin-top:38px;padding-top:20px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--sub);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
-  footer .fine a{text-decoration:none;color:var(--sub)}
+  footer{padding:clamp(30px,5vw,40px) 0 40px}
+  footer .fine{font-family:var(--mono);font-size:11.5px;color:var(--sub);display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:10px 18px}
+  footer .fineCo{display:flex;flex-wrap:wrap;gap:6px 10px}
+  footer .fineLinks{display:flex;gap:18px}
+  footer .fine a{text-decoration:none;color:var(--sub);min-height:44px;display:inline-flex;align-items:center}
   footer .fine a:hover{color:var(--ink)}
-  footer .fine .push{margin-left:auto}
+  @media (max-width:520px){
+    footer .fine{flex-direction:column;align-items:flex-start;gap:12px}
+  }
 
   .hidden{display:none!important}
   .spin{width:15px;height:15px;border:2px solid rgba(120,120,120,.28);border-top-color:var(--signal);border-radius:50%;display:inline-block;animation:sp .7s linear infinite;vertical-align:-2px}
@@ -167,47 +196,64 @@
 <a id="top"></a>
 <section class="hero">
   <div class="wrap">
-    <div class="idx"><b>01</b> / Serial lookup</div>
-    <h1>Pull the sweep report for <em>any assembly</em> we ship.</h1>
-    <p class="lede">Every Northcomm RF cable leaves the bench with a serialized test report. Type the serial off the label and read it here, the same document that shipped in the box.</p>
+    <div class="grid2">
+      <div>
+        <div class="idx"><b>01</b> / Serial lookup</div>
+        <h1>Pull the sweep report for <em>any assembly</em> we ship.</h1>
+        <p class="lede">Every Northcomm RF cable leaves the bench with a serialized test report. Type the serial off the label and read it here, the same document that shipped in the box.</p>
 
-    <div class="console">
-      <div class="clabel"><span>Enter serial number</span><span id="clabelReady">NC-</span></div>
-      <form class="searchbox" id="searchForm" autocomplete="off">
-        <span class="sn">SN</span>
-        <input id="q" name="q" inputmode="text" spellcheck="false" autocapitalize="characters" autocomplete="off" enterkeyhint="search" placeholder="000000" aria-label="Serial number">
-        <button type="submit" id="goBtn">Retrieve</button>
-      </form>
+        <div class="console">
+          <label class="clabel" for="q"><span>Enter serial number</span><span id="clabelReady">NC-</span></label>
+          <form class="searchbox" id="searchForm" autocomplete="off">
+            <span class="sn">SN</span>
+            <input id="q" name="q" inputmode="text" spellcheck="false" autocapitalize="characters" autocomplete="off" enterkeyhint="search" placeholder="000000">
+            <button type="submit" id="goBtn">Retrieve</button>
+          </form>
+        </div>
+        <div class="hint">Enter the full serial from the label. Dashes, spaces and case are ignored.</div>
+        <div class="result hidden" id="result" aria-live="polite"></div>
+      </div>
+      <button type="button" class="sample" id="sampleBtn" aria-label="Fill the input with sample serial NC-121484 and run the lookup">
+        <span class="scap">Sample serial, try it</span>
+        <span class="sval"><span class="pre">NC-</span><span class="num">121484</span></span>
+        <span class="shint">Fills the input above</span>
+      </button>
     </div>
-    <div class="hint">Enter the full serial from the label. Dashes, spaces and case are ignored.</div>
-    <div class="result hidden" id="result" aria-live="polite"></div>
   </div>
 </section>
 
 <section class="block" id="faq">
   <div class="wrap">
-    <div class="idx"><b>02</b> / Notes</div>
-    <div class="faq">
-      <details class="q"><summary>Where is the serial number?</summary><div class="a">Printed on the label attached to the cable assembly, starting with "NC" and a number. Some labels also carry a QR code that opens the report directly.</div></details>
-      <details class="q"><summary>The serial isn't found.</summary><div class="a">Check the digits against the label. If it still isn't here, the report may not be published yet. Reach out and Northcomm will confirm the assembly and upload it.</div></details>
-      <details class="q"><summary>What's in a report?</summary><div class="a">The factory sweep test for that exact assembly: VSWR and insertion loss across the swept range, the pass or fail result, and the test date. The PDF is the document that shipped with the cable.</div></details>
-      <details class="q"><summary>Do I need an account?</summary><div class="a">No. Anyone with a serial can pull its published report here. No sign-in.</div></details>
+    <div class="notesGrid">
+      <div class="notesCol">
+        <div class="idx"><b>02</b> / Notes</div>
+        <div class="faq">
+          <details class="q"><summary>Where is the serial number?</summary><div class="a">Printed on the label attached to the cable assembly, starting with "NC" and a number. Some labels also carry a QR code that opens the report directly.</div></details>
+          <details class="q"><summary>The serial isn't found.</summary><div class="a">Check the digits against the label. If it still isn't here, the report may not be published yet. Reach out and Northcomm will confirm the assembly and upload it.</div></details>
+          <details class="q"><summary>What's in a report?</summary><div class="a">The factory sweep test for that exact assembly: VSWR and insertion loss across the swept range, the pass or fail result, and the test date. The PDF is the document that shipped with the cable.</div></details>
+          <details class="q"><summary>Do I need an account?</summary><div class="a">No. Anyone with a serial can pull its published report here. No sign-in.</div></details>
+        </div>
+      </div>
+      <div class="reportCol">
+        <div class="idx"><b>03</b> / Missing report</div>
+        <div class="reportCard">
+          <div class="cta">A serial with no report on file?</div>
+          <p class="sub">Send it over. Northcomm will locate the assembly and publish its test report.</p>
+          <a class="btn btn-primary contact" href="#" id="contactBtn">Request a report</a>
+        </div>
+      </div>
     </div>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    <div class="idx"><b>03</b> / Missing report</div>
-    <div style="margin-top:16px" class="cta">A serial with no report on file?</div>
-    <p class="sub">Send it over. Northcomm will locate the assembly and publish its test report.</p>
-    <a class="btn btn-primary contact" href="#" id="contactBtn">Request a report</a>
     <div class="fine">
-      <span>Northcomm Technologies</span>
-      <span>RF cable assembly test records</span>
-      <span class="push"></span>
-      <a href="privacy.html">Privacy</a>
-      <a href="support.html">Support</a>
+      <div class="fineCo"><span>Northcomm Technologies</span><span>RF cable assembly test records</span></div>
+      <div class="fineLinks">
+        <a href="privacy.html">Privacy</a>
+        <a href="support.html">Support</a>
+      </div>
     </div>
   </div>
 </footer>
@@ -222,6 +268,10 @@
   function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
   function tidy(s){return String(s||"").toUpperCase().replace(/[^A-Z0-9]/g,"");}
   function $(id){return document.getElementById(id);}
+  // display-only: catalogue serials are stored like "NC - 121484"; tighten whitespace
+  // around the dash for on-page display only, never used for matching or URLs.
+  function displaySerial(s){ return String(s||"").trim().replace(/\s*-\s*/g,"-").replace(/\s+/g,""); }
+  function isMobileViewport(){ return window.matchMedia && window.matchMedia("(max-width:760px)").matches; }
 
   function pdfHref(pdf_url){
     if(!pdf_url) return null;
@@ -264,14 +314,20 @@
     var badgeClass = res==="PASS"?"pass":(res==="FAIL"?"fail":"na");
     var badgeTxt = res || "On file";
     var href = pdfHref(row.pdf_url);
+    var mobile = isMobileViewport();
+    var dser = displaySerial(row.serial);
+    var big = href && !mobile ?
+        "<div class='viewer'><div class='vhead'><span>Full sweep report</span><span class='vhint'>Loads below. Large scan, give it a moment.</span></div><div class='pdfwrap'><div class='pdfloading' id='pdfLoading'><span class='spin'></span> Loading report&hellip;</div><iframe class='pdfview' src='"+esc(href)+"#view=FitH&toolbar=1' title='Full test report for "+esc(dser)+"' loading='eager'></iframe></div></div>"
+      : "";
     var html =
       "<div class='card'>"+
         "<div class='head'>"+
-          "<div class='meta'><div class='ser'>"+esc(row.serial)+"</div><h2>"+esc(row.title||"Test Report")+"</h2></div>"+
+          "<div class='meta'><div class='ser'>"+esc(dser)+"</div><h2>"+esc(row.title||"Test Report")+"</h2></div>"+
           "<span class='badge "+badgeClass+"'>"+esc(badgeTxt)+"</span>"+
         "</div>"+
         specRows(row.specs)+
-        (href?"<div class='viewer'><div class='vhead'><span>Full sweep report</span><span class='vhint'>Loads below. Large scan, give it a moment.</span></div><div class='pdfwrap'><div class='pdfloading' id='pdfLoading'><span class='spin'></span> Loading report&hellip;</div><iframe class='pdfview' src='"+esc(href)+"#view=FitH&toolbar=1' title='Full test report for "+esc(row.serial)+"' loading='eager'></iframe></div></div>":"")+
+        big+
+        (href && mobile ? "<div class='notice' style='border-top:1px solid var(--line);border-left:none;border-right:none;border-bottom:none'>The full report is a large scan (several MB). Your phone's browser can't preview it inline, use the button below to open it.</div>" : "")+
         "<div class='foot'>"+
           (href?"<a class='btn btn-primary' href='"+esc(href)+"' target='_blank' rel='noopener noreferrer' id='openBtn'>Open full screen</a>":"<span style='color:var(--sub);font-family:var(--mono);font-size:12.5px'>Specs on file. Full PDF not uploaded yet.</span>")+
           "<button class='btn btn-ghost' id='againBtn'>New lookup</button>"+
@@ -303,7 +359,7 @@
   }
 
   function renderNotFound(typed){
-    show("<div class='notice'><div class='big'>No report on file for &ldquo;"+esc(typed)+"&rdquo;</div>"+
+    show("<div class='notice'><div class='big'>No report on file for &ldquo;"+esc(displaySerial(typed))+"&rdquo;</div>"+
       "Check the serial against the label and try again. If it still isn't here, the report may not be published yet. <a href='#' id='nf-contact' style='color:var(--signal-ink);font-weight:600'>Let Northcomm know</a> and they'll upload it."+
       "<div style='margin-top:18px'><button class='btn btn-ghost' id='againBtn'>Try again</button></div></div>");
     var again=$("againBtn"); if(again) again.onclick=reset;
@@ -332,6 +388,12 @@
   // ---- wire up ----
   $("searchForm").addEventListener("submit",function(e){ e.preventDefault(); run($("q").value); });
   $("contactBtn").addEventListener("click",function(e){ e.preventDefault(); contact(); });
+  var sampleBtn=$("sampleBtn");
+  if(sampleBtn){
+    sampleBtn.addEventListener("click",function(){
+      var q=$("q"); q.value="121484"; run(q.value);
+    });
+  }
 
   (function deep(){
     var m=/[#?]s=([^&]+)/.exec(location.href);
