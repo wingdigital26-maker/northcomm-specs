@@ -496,7 +496,7 @@
     var key = digits.length>=4 ? digits : want;   // sanitized to [A-Z0-9], safe inside the filter
     if(key.length < 4) return null;               // too short to identify a specific file
     var url = SUPA_URL + "/rest/v1/northcomm_parts?select=" + encodeURIComponent(PART_COLS) +
-              "&serial=ilike.*" + encodeURIComponent(key) + "*&limit=3";
+              "&serial=ilike.*" + encodeURIComponent(key) + "*&limit=10";
     try{
       var res = await fetch(url, { headers:{ apikey:SUPA_ANON, Authorization:"Bearer "+SUPA_ANON } });
       if(!res.ok) return null;
@@ -504,6 +504,14 @@
       if(!Array.isArray(rows) || !rows.length) return null;
       var exact = rows.find(function(r){ return tidy(r.serial)===want; });
       if(exact) return exact;
+      // digits-only input ("121488"): accept the row whose own digits are exactly those digits.
+      // A stray duplicate such as "NC - 121488 (1)" has different digits, so it can never
+      // block or replace the real serial.
+      if(digits.length>=4){
+        var same = rows.filter(function(r){ return String(r.serial||"").replace(/[^0-9]/g,"")===digits; });
+        if(same.length===1) return same[0];
+        if(same.length>1){ var nc = same.find(function(r){ return tidy(r.serial)==="NC"+digits; }); if(nc) return nc; }
+      }
       return rows.length===1 ? rows[0] : null;    // ambiguous partial is not a unique file
     }catch(e){ return null; }
   }
