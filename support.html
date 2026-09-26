@@ -3,107 +3,161 @@
 <head>
 <meta charset="utf-8">
 <title>Support: Northcomm Spec Lookup</title>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#353535">
-<meta name="description" content="Support for Northcomm Spec Lookup: how to look up a serial number, open its test report, and what to do if a report is missing or won't open.">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Support for Northcomm Spec Lookup: how to look up a serial number, open the test report that shipped with your product, and what to do if a report is missing or won't open.">
 <link rel="canonical" href="https://northcommtechspecs.com/support.html">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;600&family=IBM+Plex+Sans+Condensed:wght@700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink:#20211f;--sub:#5c5f5a;--signal:#FF3800;--signal-ink:#c72c00;
-    --paper:#fbfaf7;--line:#dcdad4;--line-strong:#c4c1b8;--mist:#f2f0ea;
-    --sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
-    --cond:"IBM Plex Sans Condensed","IBM Plex Sans",system-ui,sans-serif;
-    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,Consolas,monospace;
-    color-scheme:light;
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:var(--sans);background:var(--paper);color:var(--ink);line-height:1.65;-webkit-font-smoothing:antialiased}
-  img{max-width:100%}
-
-  /* top bar (matches index) */
-  .topbar{position:sticky;top:0;z-index:20;background:rgba(251,250,247,.92);backdrop-filter:saturate(1.1) blur(6px);border-bottom:1px solid var(--line-strong)}
-  .topbar .bar{max-width:1080px;margin:0 auto;padding:0 clamp(18px,4vw,40px);display:flex;align-items:center;gap:14px;height:58px}
-  .brand{display:flex;align-items:center;gap:12px;text-decoration:none}
-  .brand .logo{height:24px;width:auto;display:block}
-  .brand .tagline{font-family:var(--mono);font-size:10.5px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;color:var(--sub);padding-left:12px;border-left:1px solid var(--line-strong)}
-  .topbar .spacer{flex:1}
-  .toplink{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;color:var(--sub);text-decoration:none;padding:8px 4px}
-  .toplink:hover{color:var(--ink)}
-  @media (max-width:600px){.brand .tagline{display:none}}
-
-  .wrap{max-width:680px;margin:0 auto;padding:40px 22px 60px}
-  h1{font-family:var(--cond);font-weight:700;font-size:40px;letter-spacing:-.015em;line-height:1;margin-bottom:8px}
-  .sub{color:var(--sub);font-size:13px;font-family:var(--mono);margin-bottom:30px}
-  h2{font-family:var(--cond);font-size:19px;font-weight:700;letter-spacing:-.01em;margin:30px 0 10px}
-  p,li{font-size:15px;margin-bottom:12px}
-  ul,ol{padding-left:22px}
-  a{color:var(--signal-ink)}
-  .card{background:var(--mist);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin:16px 0}
-  .back{display:inline-block;margin-top:34px;font-size:14px;font-family:var(--mono)}
-
-  footer .fine{max-width:680px;margin:0 auto;padding:20px 22px 40px;border-top:1px solid var(--line);font-family:var(--mono);font-size:11.5px;color:var(--sub);display:flex;flex-wrap:wrap;gap:6px 18px;align-items:center}
-  footer .fine a{text-decoration:none;color:var(--sub)}
-  footer .fine a:hover{color:var(--ink)}
-  footer .fine .push{margin-left:auto}
-  .helpcard{display:flex;flex-direction:column;gap:4px}
-  .helpcard .helpline{font-size:14px;color:var(--sub)}
-  .helpcard .phone{display:inline-flex;align-items:center;min-height:44px;font-size:26px;font-weight:600;letter-spacing:.01em;color:var(--ink);text-decoration:none;font-variant-numeric:tabular-nums}
-  .helpcard .phone:hover{text-decoration:underline}
-</style>
+<link rel="preload" as="font" type="font/woff2" href="fonts/montserrat-700.woff2" crossorigin>
+<link rel="preload" as="font" type="font/woff2" href="fonts/montserrat-400.woff2" crossorigin>
+<link rel="stylesheet" href="site.css">
 </head>
 <body>
 
 <header class="topbar">
-  <div class="bar">
-    <a class="brand" href="./">
-      <img class="logo" src="northcomm-logo.png" alt="Northcomm Technologies" width="600" height="126">
-      <span class="tagline">Spec Lookup</span>
+  <div class="wrap">
+    <a class="brandLogo" href="https://northcommtechnologies.com/" aria-label="Northcomm Technologies homepage">
+      <picture><source srcset="northcomm-logo.webp" type="image/webp"><img class="logo" src="northcomm-logo.png" alt="Northcomm Technologies" width="248" height="52" decoding="async"></picture>
     </a>
+    <a class="navlink home" href="./">Spec Lookup</a>
     <span class="spacer"></span>
-    <a class="toplink" href="./">Spec Lookup</a>
+    <a class="navlink" href="support.html" aria-current="page">Support</a>
   </div>
 </header>
 
-<div class="wrap">
+<main class="page">
   <h1>Support</h1>
-  <div class="sub">Northcomm Spec Lookup</div>
 
-  <p>Northcomm Spec Lookup pulls up the factory test report on file for a Northcomm cable assembly. Type the serial printed on the label and its report opens. No sign-in, no account.</p>
+  <p class="lead">Northcomm Spec Lookup provides the comprehensive test report that originally shipped with your product. Type the serial printed on the label and the report opens. No sign-in, no account needed.</p>
 
-  <div class="card helpcard"><strong>Need help?</strong><span class="helpline">Call Northcomm support</span><a class="phone" href="tel:+18668581745" aria-label="Call Northcomm support at 1 866 858 1745">1-866-858-1745</a></div>
-
-  <h2>Looking up a serial</h2>
+  <h2>Looking up a serial number</h2>
   <ol>
-    <li>Find the serial on the label attached to the cable assembly. It starts with "NC" and a number, for example NC-121483.</li>
-    <li>Type it into the search box on the home page. Dashes, spaces and case are ignored, so 121483 and NC-121483 both work.</li>
+    <li>Find the serial number on the label attached to the product. It starts with "NC" and a number, for example NC-121483.</li>
+    <li>Type it into the search box on the home page. Dashes, spaces and case sensitivity are ignored, so 121483 and NC-121483 both work.</li>
     <li>Choose <strong>Retrieve report</strong>. The matching report appears on the page.</li>
   </ol>
 
-  <h2>Nothing comes up for a serial</h2>
-  <p>If the page says no report is on file, check the digits against the label. If it still is not here, there may be no report on file for it. Reports are on file for our newer serialized assemblies, not every cable we have ever made. Call the number above and Northcomm can check for you.</p>
+  <h2>Nothing comes up for a serial number</h2>
+  <p>If the page says no report is on file, check the digits against the label. If it still is not here, there may be no report on file for it. Please note that results are available for all serialized products manufactured after August 2026.</p>
 
   <h2>The report will not open</h2>
   <p>Choose <strong>Open full report</strong> to open the PDF in a new tab. Reports are large documents, so on a slow connection one can take a few seconds to arrive. If your browser blocks the new tab, allow pop-ups for this page and try again.</p>
 
   <h2>What is in a report</h2>
-  <p>The factory sweep test for that exact assembly: VSWR and insertion loss across the swept range, the pass or fail result, and the test date. The PDF is the same document that shipped with the cable.</p>
+  <p>Northcomm Spec Lookup provides the comprehensive test report that originally shipped with your product.</p>
+</main>
 
-  <p><a href="privacy.html">Privacy</a></p>
+<section class="block" id="how">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <h3>Three quick steps. No login needed.</h3>
+    <div class="strip">
+      <div class="stripTrack">
+        <div class="stripStep">
+          <div class="snum">Step 1</div>
+          <h4>Find the serial number</h4>
+          <p>It's on the label attached to the product, starting with NC.</p>
+          <div class="art">
+            <svg viewBox="0 0 180 110" width="170" height="104" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="14" y="30" width="152" height="60" rx="10" stroke="#c9c8c2" stroke-width="2"/>
+              <line x1="14" y1="50" x2="166" y2="50" stroke="#c9c8c2" stroke-width="2"/>
+              <text x="30" y="43" font-family="Montserrat,sans-serif" font-size="9" fill="#636464" font-weight="600">NORTHCOMM</text>
+              <text x="30" y="70" font-family="Montserrat,sans-serif" font-size="11" fill="#3f4040" font-weight="700">S/N: NC-121484</text>
+              <path d="M100 25 C 110 10, 130 8, 140 20" stroke="#ef4a25" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+              <path d="M136 15 L 142 20 L 135 26" stroke="#ef4a25" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+        </div>
+        <div class="stripStep">
+          <div class="snum">Step 2</div>
+          <h4>Type it in</h4>
+          <p>Dashes, spaces and case sensitivity do not matter.</p>
+          <div class="art">
+            <svg viewBox="0 0 180 110" width="150" height="92" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="18" y="38" width="144" height="34" rx="17" fill="#ffffff" stroke="#c9c8c2" stroke-width="2"/>
+              <text x="34" y="60" font-family="Montserrat,sans-serif" font-size="12" fill="#3f4040" font-weight="700">121484</text>
+              <line x1="112" y1="48" x2="112" y2="62" stroke="#3f4040" stroke-width="2"><animate attributeName="opacity" values="1;0;1" dur="1.1s" repeatCount="indefinite"/></line>
+            </svg>
+          </div>
+        </div>
+        <div class="stripStep">
+          <div class="snum">Step 3</div>
+          <h4>Open the report</h4>
+          <p>The report opens the comprehensive test data that originally shipped with your product.</p>
+          <div class="art">
+            <svg viewBox="0 0 180 110" width="130" height="104" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <rect x="42" y="12" width="76" height="94" rx="8" fill="#ffffff" stroke="#c9c8c2" stroke-width="2"/>
+              <line x1="54" y1="34" x2="106" y2="34" stroke="#dcdad4" stroke-width="3" stroke-linecap="round"/>
+              <line x1="54" y1="46" x2="106" y2="46" stroke="#dcdad4" stroke-width="3" stroke-linecap="round"/>
+              <line x1="54" y1="58" x2="86" y2="58" stroke="#dcdad4" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="80" cy="84" r="14" fill="#e9f6ee"/>
+              <path d="M73 84l5 5l9 -10" stroke="#1c7a41" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="stripArrow arrow1"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></div>
+      <div class="stripArrow arrow2"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg></div>
+    </div>
+  </div>
+</section>
 
-  <a class="back" href="./">&larr; Back to Spec Lookup</a>
-</div>
+<hr class="hair">
+
+<section class="block" id="report">
+  <div class="wrap">
+    <div class="reportExplain">
+      <div class="sampleImg">
+        <img src="report-sample-680.webp" srcset="report-sample-680.webp 680w, report-sample.webp 910w" sizes="(min-width:980px) 340px, 90vw" width="910" height="1127" loading="lazy" decoding="async" alt="Sample page from a genuine Northcomm test report, serial NC-121484.">
+        <div class="cap">Page 1 of a real test report</div>
+      </div>
+      <div>
+        <div class="eyebrow">On the page</div>
+        <h3>What's in a report?</h3>
+        <p class="intro">The comprehensive test report that originally shipped with your product.</p>
+        <div class="reportPoints">
+          <div class="rpoint"><b>VSWR</b><p>Voltage standing wave ratio across the swept frequency range.</p></div>
+          <div class="rpoint"><b>Insertion loss</b><p>How much signal the product loses end to end.</p></div>
+          <div class="rpoint"><b>Time-domain trace</b><p>Where along the product a reflection occurs, if any.</p></div>
+          <div class="rpoint"><b>Pass or fail</b><p>The bench result recorded on the day it was tested.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="hair">
+
+<section class="block" id="faq">
+  <div class="wrap">
+    <div class="eyebrow">Questions</div>
+    <h3>A few things people ask.</h3>
+    <div class="faq">
+      <details class="q"><summary>Where is the serial number?<span class="plus">+</span></summary><div class="a">Printed on the label attached to the product, starting with "NC" and a number. Some labels also carry a QR code that opens the report directly.</div></details>
+      <details class="q"><summary>The serial number isn't found.<span class="plus">+</span></summary><div class="a">Check the digits against the label. If it still isn't here, there may be no report on file for it. Please note that results are available for all serialized products manufactured after August 2026. If you need help, contact us below.</div></details>
+      <details class="q"><summary>What's in a report?<span class="plus">+</span></summary><div class="a">The comprehensive test report that originally shipped with your product.</div></details>
+      <details class="q"><summary>Do I need an account?<span class="plus">+</span></summary><div class="a">No. Anyone with a serial number can pull its published report here. No account or log-in needed.</div></details>
+    </div>
+
+    <div class="contactCard" id="contact">
+      <h2>Contact Us</h2>
+      <p>For further assistance please connect with us at <a href="mailto:info@northcommtechnologies.com?subject=Northcomm%20product%20report%20request&amp;body=Hi%20Northcomm%2C%0A%0AI'm%20looking%20for%20the%20test%20report%20for%20this%20product%3A%0A%0ASerial%20number%3A%20%0A%0AThanks.">info@northcommtechnologies.com</a>.</p>
+    </div>
+  </div>
+</section>
 
 <footer>
-  <div class="fine">
-    <span>Northcomm Technologies</span>
-    <span>RF cable assembly test records</span>
-    <span class="push"></span>
-    <a href="privacy.html">Privacy</a>
+  <div class="wrap">
+    <div class="fine">
+      <span>&copy; 2026 Northcomm Technologies</span>
+      <div class="fineLinks">
+        <a href="privacy.html">Privacy</a>
+        <a href="support.html">Support</a>
+      </div>
+    </div>
   </div>
 </footer>
 </body>
