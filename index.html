@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <script>document.documentElement.className=document.documentElement.className.replace("no-js","js");</script>
 <title>Northcomm Spec Lookup: Product Test Reports</title>
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src https://ocassdfsueyxwkpvspym.supabase.co; frame-src https://ocassdfsueyxwkpvspym.supabase.co; object-src 'none'; base-uri 'none'; form-action 'self'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; worker-src 'self' blob:; font-src 'self'; connect-src https://ocassdfsueyxwkpvspym.supabase.co; frame-src https://ocassdfsueyxwkpvspym.supabase.co; object-src 'none'; base-uri 'none'; form-action 'self'">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#ffffff">
@@ -109,7 +109,12 @@
   .viewer{margin-top:16px;border-radius:var(--r-sm);overflow:hidden;background:#ececeb}
   .viewer .vhead{padding:11px 14px;font-size:12px;color:var(--sub);border-bottom:1px solid #fff}
   .viewer .pdfwrap{position:relative}
-  .viewer .pdfview{display:block;width:100%;height:clamp(420px,68vh,860px);border:0;background:#ececeb}
+  .viewer .pdfpages{height:clamp(420px,68vh,860px);overflow:auto;padding:14px;display:flex;flex-direction:column;align-items:center;gap:14px;-webkit-overflow-scrolling:touch}
+  .viewer .pdfpages img{width:100%;max-width:900px;height:auto;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+  @media (max-width:759px){ .viewer .pdfpages{height:auto;max-height:78vh;padding:10px;gap:10px} }
+  .viewer .pdferr{padding:28px 18px;font-size:14px;color:var(--sub);text-align:center}
+  .btnPair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .btn[disabled]{opacity:.55;cursor:progress}
   .viewer .pdfloading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:10px;font-size:13px;color:var(--sub);background:#ececeb;pointer-events:none}
 
   .notice{background:var(--card);border-radius:var(--r-lg);padding:24px clamp(20px,3vw,26px)}
@@ -161,11 +166,20 @@
   .fsbtn:hover{background:var(--card)}
   .viewer.isfull{position:fixed;inset:0;z-index:1000;margin:0;border-radius:0;display:flex;flex-direction:column;background:#ececeb}
   .viewer.isfull .pdfwrap{flex:1;height:auto !important}
-  .viewer.isfull .pdfwrap iframe{height:100% !important}
+  .viewer.isfull .pdfpages{height:100% !important;max-height:none}
   .viewer:fullscreen{display:flex;flex-direction:column;background:#ececeb;border-radius:0}
   .viewer:fullscreen .pdfwrap{flex:1;height:auto !important}
-  .viewer:fullscreen .pdfwrap iframe{height:100% !important}
+  .viewer:fullscreen .pdfpages{height:100% !important;max-height:none}
   body.fs-lock{overflow:hidden}
+  /* Print: only the report pages, one per sheet */
+  #printArea{display:none}
+  @media print{
+    @page{margin:.3in}
+    body > *:not(#printArea){display:none!important}
+    #printArea{display:block}
+    #printArea img{display:block;width:auto;height:auto;max-width:100%;max-height:99vh;margin:0 auto;object-fit:contain;break-after:page;page-break-after:always}
+    #printArea img:last-child{break-after:auto;page-break-after:auto}
+  }
   /* reserve the result area the moment a lookup starts, so nothing jumps when the report arrives */
   body.has-result .result{min-height:420px}
   @media (min-width:980px){ body.has-result .result{min-height:calc(min(70vh,860px) + 60px)} }
@@ -309,6 +323,46 @@
     }catch(e){ return null; }
   }
 
+  // Draw every page of the report onto the page itself (works on phones too, where
+  // browsers will not show a PDF inline). pdf.js is served from this site.
+  var renderToken = 0;
+  async function renderPages(href){
+    var token = ++renderToken;
+    var box=$("pdfPages"), pl=$("pdfLoading");
+    function stale(){ return token!==renderToken || !document.body.contains(box); }
+    try{
+      var pdfjs = await import("./vendor/pdfjs/pdf.min.mjs");
+      pdfjs.GlobalWorkerOptions.workerSrc = "vendor/pdfjs/pdf.worker.min.mjs";
+      var doc = await pdfjs.getDocument({ url: href, isEvalSupported: false }).promise;
+      for(var n=1; n<=doc.numPages; n++){
+        if(stale()) return;
+        var page = await doc.getPage(n);
+        var base = page.getViewport({ scale: 1 });
+        var vp = page.getViewport({ scale: Math.min(3, 1700 / base.width) });
+        var canvas = document.createElement("canvas");
+        canvas.width = Math.floor(vp.width); canvas.height = Math.floor(vp.height);
+        await page.render({ canvasContext: canvas.getContext("2d"), viewport: vp }).promise;
+        var blob = await new Promise(function(r){ canvas.toBlob(r, "image/jpeg", 0.9); });
+        canvas.width = canvas.height = 0;
+        if(stale()) return;
+        var img = new Image();
+        img.src = URL.createObjectURL(blob);
+        img.alt = "Page " + n + " of " + doc.numPages;
+        img.width = vp.width; img.height = vp.height;
+        box.appendChild(img);
+        var pa=$("printArea"); if(!pa){ pa=document.createElement("div"); pa.id="printArea"; document.body.appendChild(pa); }
+        if(n===1) pa.innerHTML="";
+        pa.appendChild(img.cloneNode());
+        if(pl){ pl.classList.add("hidden"); pl=null; }
+      }
+      var pb=$("printBtn"); if(pb) pb.disabled=false;
+    }catch(e){
+      if(stale()) return;
+      if(pl) pl.classList.add("hidden");
+      box.innerHTML = "<div class='pdferr'>The report could not be shown here. Use Download to save a copy.</div>";
+    }
+  }
+
   function specRows(specs){
     if(!Array.isArray(specs) || !specs.length) return "";
     return "<table class='specs'>" + specs.map(function(pair){
@@ -323,10 +377,10 @@
     var pillIcon = res==="PASS"?PASS_ICON:(res==="FAIL"?FAIL_ICON:"");
     var pillTxt = res || "On file";
     var href = pdfHref(row.pdf_url);
-    var mobile = isMobileViewport();
     var dser = displaySerial(row.serial);
-    var big = href && !mobile ?
-        "<div class='viewer' id='viewer'><div class='vhead'><span>Full sweep report. Large scan, give it a moment.</span><button type='button' class='fsbtn' id='fsBtn' aria-pressed='false'><svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5'/></svg><span id='fsTxt'>Full screen</span></button></div><div class='pdfwrap'><div class='pdfloading' id='pdfLoading'><span class='spin dark'></span> Loading report&hellip;</div><iframe class='pdfview' src='"+esc(href)+"#view=FitH&toolbar=1' title='Full test report for "+esc(dser)+"' loading='eager'></iframe></div></div>"
+    var dl = href ? href + (href.indexOf("?")<0?"?":"&") + "download=" + encodeURIComponent(dser + ".pdf") : null;
+    var big = href ?
+        "<div class='viewer' id='viewer'><div class='vhead'><span>Test report for "+esc(dser)+"</span><button type='button' class='fsbtn' id='fsBtn' aria-pressed='false'><svg width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5'/></svg><span id='fsTxt'>Full screen</span></button></div><div class='pdfwrap'><div class='pdfloading' id='pdfLoading'><span class='spin dark'></span> Loading report&hellip;</div><div class='pdfpages' id='pdfPages' role='document' aria-label='Test report for "+esc(dser)+"'></div></div></div>"
       : "";
     var html =
       "<div class='card'>"+
@@ -336,23 +390,15 @@
         "<span class='pill "+pillClass+"'>"+pillIcon+esc(pillTxt)+"</span>"+
         specRows(row.specs)+
         (href ? "<div class='filecard'><span class='icon'>PDF</span><span class='pFileText'><b>"+esc(dser)+".pdf</b><span>Factory sweep report</span></span></div>" : "")+
-        (href && mobile ? "<div class='notice' style='margin-top:14px;padding:16px'><p>The full report is a large scan (several MB). Your phone's browser can't preview it inline, use the button below to open it.</p></div>" : "")+
         "<div class='btnRow'>"+
-          (href?"<a class='btn btn-primary' href='"+esc(href)+"' target='_blank' rel='noopener noreferrer' id='openBtn'><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><path d='M12 3v12m0 0l-4-4m4 4l4-4M4 19h16'/></svg>Open full report</a>":"<span style='color:var(--sub);font-size:13.5px'>Specs on file. Full PDF not uploaded yet.</span>")+
+          (href?"<div class='btnPair'><a class='btn btn-primary' href='"+esc(dl)+"' download='"+esc(dser)+".pdf' id='dlBtn'><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M12 3v12m0 0l-4-4m4 4l4-4M4 19h16'/></svg>Download</a><button type='button' class='btn btn-primary' id='printBtn' disabled><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z'/></svg>Print</button></div>":"<span style='color:var(--sub);font-size:13.5px'>Specs on file. Full PDF not uploaded yet.</span>")+
           "<button class='btn btn-quiet' id='againBtn'>New lookup</button>"+
         "</div>"+
         big+
       "</div>";
     show(html);
-    // hide the viewer's loading affordance once the PDF iframe reports it has loaded;
-    // fall back on a timeout so the spinner never outlives a load event that doesn't fire
-    var pl=$("pdfLoading");
-    if(pl){
-      var frame=pl.parentNode.querySelector("iframe.pdfview");
-      var done=function(){ if(pl){ pl.classList.add("hidden"); pl=null; } };
-      if(frame) frame.addEventListener("load",done);
-      setTimeout(done,15000);
-    }
+    if(href) renderPages(href);
+    var pb=$("printBtn"); if(pb) pb.onclick=function(){ window.print(); };
     var again=$("againBtn"); if(again) again.onclick=reset;
   }
 
@@ -364,7 +410,7 @@
   }
 
   function show(html){ var r=$("result"); r.innerHTML=html; r.classList.remove("hidden"); document.body.classList.add("has-result"); window.scrollTo({top:0,behavior:(window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches)?"auto":"smooth"}); }
-  function reset(){ var r=$("result"); r.classList.add("hidden"); r.innerHTML=""; document.body.classList.remove("has-result"); var q=$("q"); q.value=""; q.focus(); }
+  function reset(){ renderToken++; var pa=$("printArea"); if(pa) pa.innerHTML=""; var r=$("result"); r.classList.add("hidden"); r.innerHTML=""; document.body.classList.remove("has-result"); var q=$("q"); q.value=""; q.focus(); }
 
   async function run(typed){
     typed=(typed||"").trim();
