@@ -30,16 +30,16 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 /* ---- header: logo goes to the Northcomm homepage, "Spec Lookup" goes to this site's home ---- */
 .topbar{position:sticky;top:0;z-index:30;background:rgba(255,255,255,.94);backdrop-filter:saturate(180%) blur(10px);border-bottom:1px solid var(--line)}
 .topbar .wrap{display:flex;align-items:center;gap:16px;height:80px}
-.brandLogo{display:flex;align-items:center;min-height:44px;text-decoration:none}
-.brandLogo .logo{height:40px;width:auto;aspect-ratio:600/126;display:block}
+.brandLogo{display:flex;align-items:center;min-height:44px;text-decoration:none;flex-shrink:0}
+.brandLogo .logo{height:40px;width:auto;max-width:none;flex-shrink:0;aspect-ratio:748/120;display:block}
 .navlink{font-size:15px;font-weight:600;color:var(--grey);text-decoration:none;white-space:nowrap;padding:8px 4px;min-height:44px;display:inline-flex;align-items:center}
 .navlink:hover{color:var(--orange)}
 .navlink.home{padding-left:16px;border-left:1px solid var(--line)}
 .topbar .spacer{flex:1}
 @media (max-width:600px){
   .topbar .wrap{height:68px;gap:10px}
-  .brandLogo .logo{height:28px}
-  .navlink{font-size:14px}
+  .brandLogo .logo{height:24px}
+  .navlink{font-size:13.5px}
   .navlink.home{padding-left:10px}
 }
 
