@@ -39,6 +39,7 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .topbar .spacer{flex:1}
 .navlink{font-size:18px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--grey);text-decoration:none;white-space:nowrap;padding:8px 4px;min-height:44px;display:inline-flex;align-items:center}
 .navlink:hover,.navlink[aria-current="page"]{color:var(--orange)}
+.navlink.home{padding-left:18px;border-left:1px solid var(--line);margin-left:2px}
 
 /* orange info bar under the header, same as the main site */
 .infobar{background:var(--title);color:#fff;font-size:16px;font-weight:700;line-height:22px}
@@ -50,17 +51,20 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 @media (max-width:600px){
   .topbar .wrap{height:68px;gap:10px}
   .brandLogo .logo{height:26px}
-  .navlink{font-size:15px}
+  .navlink{font-size:13px;letter-spacing:.02em}
+  .navlink.home{padding-left:10px;margin-left:0}
   .infobar{font-size:13px;line-height:18px}
   .infobar .wrap{gap:4px 14px}
 }
 @media (max-width:400px){
   .topbar .wrap{padding-left:16px;padding-right:16px}
   .brandLogo .logo{height:22px}
-  .navlink{font-size:14px}
+  .navlink{font-size:12px;letter-spacing:0}
+  .navlink.home{padding-left:8px}
+  .topbar .wrap{gap:8px}
   .infobar{font-size:12px}
 }
-@media (max-width:340px){ .brandLogo .logo{height:18px} .navlink{font-size:13px} }
+@media (max-width:340px){ .brandLogo .logo{height:17px} .navlink{font-size:11px} .navlink.home{padding-left:6px} .topbar .wrap{gap:6px;padding-left:12px;padding-right:12px} }
 
 /* ---- page body: dotted texture down the left, as on the main site ---- */
 .pagebody{flex:1;background:#fff url("bg-dots.png") repeat-y 0 50%;background-size:50% auto}
