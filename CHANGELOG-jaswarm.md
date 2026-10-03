@@ -49,3 +49,12 @@ Committed: 76ea9bc · Note: verifier agent stalled (watchdog), diff re-checked d
 | fix | corrected support description that advertised a "browse" feature the app no longer has (exact-serial only) | grep: browse absent from body, index.html L235 confirms serial-only |
 | safety | clean — meta/link tags only | inline (no security surface) |
 Committed: edbf520 · SITE DIALED: SEO files, branded 404, full a11y, and consistent indexable meta across all 3 pages all shipped. ja/loop 6 commits ahead of master, ready to merge -> auto-deploys via Pages.
+
+**jaswarm · Round 1 (2026-10-03) · Lisa R2 feedback, site + ScanSpec app** · L1
+| Lane | Change | Proof |
+|---|---|---|
+| visual | Site mirrors the northcommtechnologies.com Contact page: logo + SUPPORT header, orange info bar (phone, CAGE, DUNS), dot texture, boxed content, caps orange titles, square buttons, left-aligned, dark footer; NV favicon; tab title | before/after shots, 45/45 scripted checks |
+| content | Support: duplicate report text, ON THE PAGE, QUESTIONS, divider removed. R1 items rechecked | verify.py |
+| app | ScanSpec: Montserrat, brand orange, square boxes, caps titles, product wording, not-found uses Lisa's wording + info@ | app before/after shots |
+| perf | Dead step-strip and preview CSS removed | diff |
+**Committed:** site f49d18e, app 5f06d25 (scanspec ja/loop) · **Ready to arm (your call):** merge + push site to master (goes live); app to Mark's repo · **Open:** phone in bar, edit access answer for Lisa · **Next round:** paused for Jack
