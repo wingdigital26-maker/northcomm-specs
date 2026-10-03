@@ -47,7 +47,8 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 .infobar .wrap{display:flex;align-items:center;justify-content:space-between;gap:8px 20px;flex-wrap:wrap;padding:8px 15px}
 @media (min-width:1195px){ .infobar .wrap{padding-left:7.5px;padding-right:7.5px} }
 @media (min-width:750px) and (max-width:1194px){ .brandLogo .logo{height:34.4px} }
-.infobar a{color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.infobar a{color:#fff;text-decoration:none;white-space:pre}
+.infobar .ph{display:inline-block;vertical-align:-2px}
 .infobar a:hover{text-decoration:underline}
 .infobar svg{flex-shrink:0}
 
