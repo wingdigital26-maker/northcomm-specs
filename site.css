@@ -54,14 +54,14 @@ a:focus-visible,button:focus-visible,input:focus-visible,summary:focus-visible{o
 /* phones: like the main site, a 65px header with a larger logo, and only phone + CAGE in the bar */
 @media (max-width:749px){
   .topbar .wrap{height:65px;gap:0;padding-left:15px;padding-right:10px}
-  .brandLogo .logo{height:30px}
+  .brandLogo .logo{height:37px}
   .navlink{font-size:12px;letter-spacing:.3px;padding:0 8px;height:48px}
   .navlink[aria-current="page"]::after{left:8px;right:8px;bottom:8px}
   .infobar .wrap{flex-wrap:nowrap}
   .infobar .duns{display:none}
 }
-@media (max-width:360px){ .brandLogo .logo{height:26px} .navlink{font-size:11px;padding:0 6px} .infobar{font-size:15px} }
-@media (max-width:340px){ .brandLogo .logo{height:26px} .navlink{font-size:10.5px;padding:0 5px;letter-spacing:0} .topbar .wrap{padding-left:12px;padding-right:6px} .infobar{font-size:14px} }
+@media (max-width:360px){ .brandLogo .logo{height:34px} .navlink{font-size:11px;padding:0 6px} .infobar{font-size:15px} }
+@media (max-width:340px){ .brandLogo .logo{height:31px} .navlink{font-size:10.5px;padding:0 5px;letter-spacing:0} .topbar .wrap{padding-left:12px;padding-right:6px} .infobar{font-size:14px} }
 
 /* ---- page body: dotted texture down the left, as on the main site ---- */
 .pagebody{flex:1;background:#fff url("bg-dots.png") repeat-y 0 50%;background-size:50% auto}
