@@ -304,7 +304,43 @@
   // Draw every page of the report onto the page itself (works on phones too, where
   // browsers will not show a PDF inline). pdf.js is served from this site.
   var renderToken = 0;
-  async function renderPages(href){
+  // Mark's uploads only carry serial + PDF, so the spec table is read out of the
+  // report itself (marker readouts, sweep range, test date). Nothing to fill in by hand.
+  async function specsFromPdf(doc, result){
+    var page = await doc.getPage(1);
+    var tc = await page.getTextContent();
+    var t = tc.items.map(function(i){ return i.str; }).join(" ").replace(/\s+/g," ");
+    var re = /M\d\s+([\d.]+)\s*(MHz|GHz)\s+(-?[\d.]+)\s*(U|dB)\b/g, m, swr={}, il={}, swrK=[], ilK=[];
+    while((m = re.exec(t))){
+      var f = Math.round(parseFloat(m[1]) * (m[2]==="GHz" ? 1000 : 1)), v = parseFloat(m[3]);
+      if(m[4]==="U"){ if(!(f in swr)){ swr[f]=v; swrK.push(f); } }
+      else if(!(f in il)){ il[f]=v; ilK.push(f); }
+    }
+    // Standard markers are 155/425/920 MHz; some reports use a nearby point (150 MHz),
+    // so take the closest marker within 15% and label it with its real frequency.
+    function pick(found, keys, want, n){
+      var w = [];
+      want.forEach(function(f){
+        var best = null;
+        keys.forEach(function(k){ if(Math.abs(k-f) <= f*0.15 && (best===null || Math.abs(k-f) < Math.abs(best-f))) best = k; });
+        if(best!==null && w.indexOf(best)<0) w.push(best);
+      });
+      return w.length ? w : keys.slice(0,n);
+    }
+    function freq(f){ return f>=1000 ? (f/1000)+" GHz" : f+" MHz"; }
+    var rows = [];
+    if(result) rows.push(["Result", result]);
+    pick(swr, swrK, [155,425,920], 3).forEach(function(f){ rows.push(["VSWR @ "+freq(f), swr[f].toFixed(3)]); });
+    pick(il, ilK, [155,920], 2).forEach(function(f){ rows.push(["Insertion loss @ "+freq(f), il[f].toFixed(2)+" dB"]); });
+    if(rows.length < (result?2:1)) return null;          // not a layout we recognise: show the PDF only
+    var st = /Start\s+([\d.]+)\s*(kHz|MHz|GHz)/.exec(t), sp = /Stop\s+([\d.]+)\s*(kHz|MHz|GHz)/.exec(t);
+    if(st && sp) rows.push(["Swept range", st[1]+" "+st[2]+" - "+sp[1]+" "+sp[2]]);
+    var dt = /\b(\d{1,2}\/\d{1,2}\/\d{4})\b/.exec(t);
+    if(dt) rows.push(["Tested", dt[1]]);
+    return rows;
+  }
+
+  async function renderPages(href, specsFor){
     var token = ++renderToken;
     var box=$("pdfPages"), pl=$("pdfLoading");
     function stale(){ return token!==renderToken || !document.body.contains(box); }
@@ -312,6 +348,13 @@
       var pdfjs = await import("./vendor/pdfjs/pdf.min.mjs");
       pdfjs.GlobalWorkerOptions.workerSrc = "vendor/pdfjs/pdf.worker.min.mjs";
       var doc = await pdfjs.getDocument({ url: href, isEvalSupported: false }).promise;
+      if(specsFor){
+        try{
+          var sp = await specsFromPdf(doc, specsFor.result);
+          var sb = $("specsBox");
+          if(sp && sb && !stale()) sb.innerHTML = specRows(sp);
+        }catch(e){}
+      }
       for(var n=1; n<=doc.numPages; n++){
         if(stale()) return;
         var page = await doc.getPage(n);
@@ -366,7 +409,7 @@
         "<h2>"+esc(row.title||"Test Report")+"</h2>"+
         "<div class='ser'>"+esc(dser)+"</div>"+
         "<span class='pill "+pillClass+"'>"+pillIcon+esc(pillTxt)+"</span>"+
-        specRows(row.specs)+
+        "<div id='specsBox'>"+specRows(row.specs)+"</div>"+
         (href ? "<div class='filecard'><span class='icon'>PDF</span><span class='pFileText'><b>"+esc(dser)+".pdf</b><span>Factory sweep report</span></span></div>" : "")+
         "<div class='btnRow'>"+
           (href?"<div class='btnPair'><a class='btn btn-primary' href='"+esc(dl)+"' download='"+esc(dser)+".pdf' id='dlBtn'><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M12 3v12m0 0l-4-4m4 4l4-4M4 19h16'/></svg>Download</a><button type='button' class='btn btn-primary' id='printBtn' disabled><svg width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round' aria-hidden='true'><path d='M6 9V3h12v6M6 18H4a1 1 0 0 1-1-1v-6a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v6a1 1 0 0 1-1 1h-2M6 14h12v7H6z'/></svg>Print</button></div>":"<span style='color:var(--sub);font-size:13.5px'>Specs on file. Full PDF not uploaded yet.</span>")+
@@ -375,7 +418,8 @@
         big+
       "</div>";
     show(html);
-    if(href) renderPages(href);
+    var hasSpecs = Array.isArray(row.specs) && row.specs.length;
+    if(href) renderPages(href, hasSpecs ? null : { result: res || "" });
     var pb=$("printBtn"); if(pb) pb.onclick=function(){ window.print(); };
     var again=$("againBtn"); if(again) again.onclick=reset;
   }
