@@ -130,6 +130,10 @@
   .viewer:fullscreen .pdfwrap{flex:1;height:auto !important}
   .viewer:fullscreen .pdfpages{height:100% !important;max-height:none}
   body.fs-lock{overflow:hidden}
+  /* Full screen shows the whole page at once: fit to the screen, never cut off, no scrolling. */
+  .viewer.isfull .pdfwrap,.viewer:fullscreen .pdfwrap{min-height:0}
+  .viewer.isfull .pdfpages,.viewer:fullscreen .pdfpages{position:absolute;inset:0;height:auto !important;overflow:auto;justify-content:flex-start}
+  .viewer.isfull .pdfpages img,.viewer:fullscreen .pdfpages img{flex:0 0 100%;height:100%;width:auto;max-width:100%;object-fit:contain;box-shadow:none;background:transparent}
   /* Print: only the report pages, one per sheet */
   #printArea{display:none}
   @media print{
